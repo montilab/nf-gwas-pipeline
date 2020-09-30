@@ -4,13 +4,13 @@ A Nextflow Genome-Wide Association Study (GWAS) Pipeline
 ### Clone Repository
 ```bash
 
-$ git clone https://github.com/gurinovich/GWASpipeline
+$ git clone https://github.com/montilab/nf-gwas-pipeline
 
 ```
 ### Initalize Paths to Test Data
 ```bash
 
-$ cd GWASpipeline/pipeline 
+$ cd nf-gwas-pipeline
 $ python utils/paths.py  
 
 ```
