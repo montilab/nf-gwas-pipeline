@@ -1,0 +1,70 @@
+---
+title: "Gene-Based Tests Report"
+---
+
+```{r include=FALSE}
+#!/usr/bin/env Rscript
+args<-commandArgs(TRUE)
+outdir <- args[1]
+max_pval <- args[2]
+```
+
+```{r include=FALSE}
+suppressPackageStartupMessages(library(SeqArray))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(EBImage))
+```
+
+##QC
+The number of SNPs included in the gds file for each chromosome and total:
+```{r include=FALSE}
+snp.n.gds <- c()
+for(i in 1:22){
+  gds <- seqOpen(paste0(outdir,"/GDS/gds_files/chr_",i,".gds"))
+  snp.n.gds <- c(snp.n.gds, length(seqGetData(gds, "variant.id")))
+  seqClose(gds)
+}
+snp.n.gds <- c(snp.n.gds, sum(snp.n.gds))
+chr <- c(paste0("chr", 1:22), "Total")
+dat.gds <- data.frame(count=snp.n.gds)
+rownames(dat.gds) <- chr
+```
+```{r}
+kable(t(dat.gds))
+```
+
+##PCA plot
+```{r include=FALSE}
+try(pc1 <- readImage(paste0(outdir, "/PCA_GRM/pcair/PC1vsPC2.png")))
+try(pc2 <- readImage(paste0(outdir, "/PCA_GRM/pcair/PC3vsPC4.png")))
+```
+```{r}
+par(mfrow=c(1,2))
+try(display(pc1))
+try(display(pc2))
+```
+
+##Kinship plot
+```{r include=FALSE}
+try(kinship <- readImage(paste0(outdir, "/PCA_GRM/pcrelate/kinship.png")))
+```
+```{r}
+try(display(kinship))
+```
+
+##QQ plot
+```{r include=FALSE}
+try(qq <- readImage(paste0(outdir, "/Summary_Plot/qq_plot/qqplot.png")))
+```
+```{r}
+try(display(qq))
+```
+
+##Annotated top results
+```{r include=FALSE}
+annotated.results <- fread(paste0(outdir, "/Summary_Plot/combined_results/all_chr.csv"), header=T, stringsAsFactors=F)
+```
+```{r}
+kable(annotated.results[annotated.results$pval < max_pval,])
+```
