@@ -664,7 +664,7 @@ if(params.gene_based){
     """
     mkdir -p ${params.outdir}/Report
     Rscript -e 'rmarkdown::render("$PWD/bin/07_report_gene.Rmd")' ${params.outdir} ${params.max_pval}
-    mv $PWD/bin/07_report_gene.html ${params.outdir}/Report/07_report_gene.html
+    mv $PWD/bin/07_report_gene.html ${params.outdir}/Report/Report.html
     """
   }
 }
