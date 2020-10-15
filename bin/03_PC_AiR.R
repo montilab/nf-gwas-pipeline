@@ -1,4 +1,4 @@
-å#!/usr/bin/env Rscript
+#!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
 gds.file <- args[1]
 pheno.file <- args[2]
