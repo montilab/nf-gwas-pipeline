@@ -93,7 +93,7 @@ try(qq1 <- readImage(paste0(outdir, "/Summary_Plot/qq_manhattan/qqplot.png")))
 try(display(qq1))
 ```
 ```{r include=FALSE}
-try(manhattan1 <- readImage(paste0(outdir, "/Summary_Plot/qq_manhattan/qqplot_MAF_0.1.png")))
+try(manhattan1 <- readImage(paste0(outdir, "/Summary_Plot/qq_manhattan/manhattan_plot.png")))
 ```
 ```{r}
 try(display(manhattan1))
@@ -101,7 +101,7 @@ try(display(manhattan1))
 
 ##QQ and Manhattan plot for SNPs passed filter and MAF threshold
 ```{r include=FALSE}
-try(qq2 <- readImage(paste0(outdir, "/Summary_Plot/qq_manhattan/manhattan_plot.png")))
+try(qq2 <- readImage(paste0(outdir, "/Summary_Plot/qq_manhattan/qqplot_MAF_0.1.png")))
 ```
 ```{r}
 try(display(qq2))
