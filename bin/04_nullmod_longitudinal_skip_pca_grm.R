@@ -82,10 +82,10 @@ if(grm=="null"){
 	        		   id="sample.id", family = model.switch)
 		cat("####glmmkin ends\n\n")
 	}else{
-		cat("\n####glmmkin starts\n")
+		cat("\n####glmmkin with grm starts\n")
 		nullmod <- glmmkin(fix.eff, data=pheno.pc.dat, kins=NULL, 
 		           random.slope=slope, id="sample.id", family = model.switch)
-		cat("####glmmkin ends\n\n")
+		cat("####glmmkin with grm ends\n\n")
 	}	
 }else{
 	grm <- readRDS(grm)
