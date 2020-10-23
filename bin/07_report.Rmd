@@ -58,7 +58,8 @@ for(i in 1:22){
   snp.n.f <- c(snp.n.f, dim(result)[1])
 }
 snp.n.f <- c(snp.n.f, sum(snp.n.f))
-dat.f <- data.frame(count=snp.n.f, missing.rate=round(1-snp.n.f/snp.n.r, digits = 3))
+missing.rate <- round(1-snp.n.f/snp.n.r, digits = 3)
+dat.f <- data.frame(count=snp.n.f, missing.rate=ifelse(missing.rate < 0, 0, missing.rate))
 rownames(dat.f) <- chr
 ```
 ```{r}
