@@ -60,12 +60,12 @@ if(grm=="null"){
 	cat("####fitNullModel ends\n\n")
 }else{
 	grm <- readRDS(grm)
-	cat("\n####fitNullModel starts\n")
+	cat("\n####fitNullModel with grm starts\n")
 	nullmod <- fitNullModel(seqData, outcome=phenotypes, 
     	                    covars=covariates,
         	                cov.mat=grm,
             	            family=model.switch, verbose=T)
-	cat("####fitNullModel ends\n\n")
+	cat("####fitNullModel with grm ends\n\n")
 }
 
 saveRDS(nullmod,"nullmod.rds")
