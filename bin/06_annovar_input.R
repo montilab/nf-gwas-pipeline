@@ -17,7 +17,7 @@ snps <- snps[which(!is.na(snps$pval)),]
 snps <- snps[snps$pval<max.pval,]
 print(paste0("number of variants to be annotated : ",dim(snps)[1]))
 
-fwrite(snps, "top_snps_caf_annotated.csv", quote = F, row.names = F)
+fwrite(snps, "top_snps_caf_annotated.csv", row.names = F)
 
 snps.annovar <- snps %>%
   mutate(pos2 = pos, A1 = 0, A2 = 0) %>%
