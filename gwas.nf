@@ -54,15 +54,6 @@ if(params.help){
 log.info """
 USAGE:
 
-The command lines for runing the pipeline is:
-
- for gwas:
- nextflow gwas.nf --vcf_list ./data/toy_vcf.csv --pheno ./data/pheno_file_logistic.csv --snpset $PWD/data/snpset.txt --phenotype outcome --covars age,sex,PC1,PC2,PC3,PC4 --ref_genome hg19 --gwas --model linear --test Wald
-
- for Gene-based Test:
-
- for longitudinal analysis:
-
 Mandatory arguments:
 --vcf_list                 String        Path to the two-column mapping csv file: id , file_path 
 --pheno                    String        Path to the phenotype file
@@ -335,7 +326,7 @@ if (params.gene_based & params.pca_grm) {
     file '*' from nullmod.collect()
  
     output:
-    set val(chr), file('*.csv') into gene_based
+    file('*.csv') into gene_based
     file '*'
   
     script:
@@ -355,7 +346,7 @@ if (params.gene_based & !params.pca_grm) {
     file '*' from nullmod.collect()
  
     output:
-    set val(chr), file('*.csv') into gene_based
+    file('*.csv') into gene_based
     file '*'
 
     script:
@@ -467,7 +458,7 @@ if ( (params.gwas | params.longitudinal) & params.pca_grm) {
   
   output:
   file '*' 
-  set val(chr), file('*.csv') into caf_by_group
+  file('*.csv') into caf_by_group
 
   script:
   """
@@ -487,7 +478,7 @@ if ( (params.gwas | params.longitudinal) & !params.pca_grm) {
   
   output:
   file '*' 
-  set val(chr), file('*.csv') into caf_by_group
+  file('*.csv') into caf_by_group
 
   script:
   """
@@ -522,7 +513,7 @@ if (params.gwas | params.longitudinal) {
   
     input:
     set val(chr), file(csv1) from gwas1
-    set val(chr), file(csv2) from caf_by_group
+    file '*' from caf_by_group.collect()
   
     output:
     file '*' 
@@ -530,7 +521,7 @@ if (params.gwas | params.longitudinal) {
 
     script:
     """
-    05_merge_by_chr.R ${csv1} ${csv2} ${params.model} ${chr}_caf_annotated.csv ${chr}_merge.log
+    05_merge_by_chr.R ${csv1} ${chr}_caf_by_group.csv ${params.model} ${chr}_caf_annotated.csv ${chr}_merge.log
     """
   }
 }
