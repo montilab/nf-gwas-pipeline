@@ -4,6 +4,8 @@ results/
 .nextflow*
 
 # General
+images/
+media/
 .DS_Store
 .AppleDouble
 .LSOverride
