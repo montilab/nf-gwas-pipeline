@@ -86,21 +86,21 @@ ref       : hg19
 -
 [warm up] executor > local
 executor >  local (141)
-[60/b5b95e] process > qc_miss                   [100%] 22 of 22 ✔
-[11/fa0fbd] process > annovar_ref               [100%] 1 of 1 ✔
-[8f/25f8fa] process > qc_mono                   [100%] 22 of 22 ✔
-[82/069a6d] process > vcf_to_gds                [100%] 22 of 22 ✔
-[3e/819e86] process > merge_gds                 [100%] 1 of 1 ✔
-[c3/f23390] process > nullmod_skip_pca_grm      [100%] 1 of 1 ✔
-[ed/91344b] process > gwas_skip_pca_grm         [100%] 22 of 22 ✔
-[b4/3aea3e] process > caf_by_group_skip_pca_grm [100%] 22 of 22 ✔
-[e2/3c778d] process > merge_by_chr              [100%] 22 of 22 ✔
-[fe/33ebd4] process > combine_results           [100%] 1 of 1 ✔
-[8b/2020d3] process > annovar_input             [100%] 1 of 1 ✔
-[61/3a373f] process > plot                      [100%] 1 of 1 ✔
-[66/6f4246] process > annovar                   [100%] 1 of 1 ✔
-[85/d4266b] process > add_annovar               [100%] 1 of 1 ✔
-[9e/4fc2fe] process > report                    [100%] 1 of 1 ✔
+[60/b5b95e] process > qc_miss                   [100%] 22 of 22 <e2><9c><94>
+[11/fa0fbd] process > annovar_ref               [100%] 1 of 1 <e2><9c><94>
+[8f/25f8fa] process > qc_mono                   [100%] 22 of 22 <e2><9c><94>
+[82/069a6d] process > vcf_to_gds                [100%] 22 of 22 <e2><9c><94>
+[3e/819e86] process > merge_gds                 [100%] 1 of 1 <e2><9c><94>
+[c3/f23390] process > nullmod_skip_pca_grm      [100%] 1 of 1 <e2><9c><94>
+[ed/91344b] process > gwas_skip_pca_grm         [100%] 22 of 22 <e2><9c><94>
+[b4/3aea3e] process > caf_by_group_skip_pca_grm [100%] 22 of 22 <e2><9c><94>
+[e2/3c778d] process > merge_by_chr              [100%] 22 of 22 <e2><9c><94>
+[fe/33ebd4] process > combine_results           [100%] 1 of 1 <e2><9c><94>
+[8b/2020d3] process > annovar_input             [100%] 1 of 1 <e2><9c><94>
+[61/3a373f] process > plot                      [100%] 1 of 1 <e2><9c><94>
+[66/6f4246] process > annovar                   [100%] 1 of 1 <e2><9c><94>
+[85/d4266b] process > add_annovar               [100%] 1 of 1 <e2><9c><94>
+[9e/4fc2fe] process > report                    [100%] 1 of 1 <e2><9c><94>
 Completed at: 15-Oct-2020 17:30:28
 Duration    : 44.1s
 CPU hours   : 0.1
@@ -238,7 +238,7 @@ kable(grm[1:5,1:5])
 ```
 
 |         |     HG00110 |     HG00116 |     HG00120 |     HG00128 |     HG00136 |
-| :------ | ----------: | ----------: | ----------: | ----------: | ----------: |
+| ------- | ----------: | ----------: | ----------: | ----------: | ----------: |
 | HG00110 |   1.0332116 | \-0.0179534 |   0.0070812 | \-0.0114037 | \-0.0122968 |
 | HG00116 | \-0.0179534 |   0.9901158 |   0.1161200 | \-0.0369330 | \-0.0204240 |
 | HG00120 |   0.0070812 |   0.1161200 |   0.9772376 | \-0.0595185 | \-0.0337373 |
@@ -392,5 +392,5 @@ run with .config file:
 nextflow run gwas.nf -c $PWD/configs/gwla_1KG_linear_slope.config
 
 run with equivalent command:
-nextflow run gwas.nf --vcf_list $PWD/data/1KG_vcf.csv --pheno $PWD/data/1KG_pheno_longitudinal.csv --phenotype outcome --covars sex,age,PC1,PC2,PC3,PC4 --pca_grm --model linear --test Score --longitudinal --group Population --min_maf 0.1 --max_pval_manhattan 0.5 --max_pval 0.01 --ref_genome hg19
+nextflow run gwas.nf --vcf_list $PWD/data/1KG_vcf.csv --pheno $PWD/data/1KG_pheno_longitudinal.csv --phenotype outcome --covars sex,age,PC1,PC2,PC3,PC4 --pca_grm --model linear --test Score --longitudinal --random_slope delta.age --group Population --min_maf 0.1 --max_pval_manhattan 0.5 --max_pval 0.01 --ref_genome hg19
 ```
