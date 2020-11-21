@@ -189,8 +189,7 @@ map.dat <- read.csv("./data/toy_vcf.csv")
 kable(head(map.dat))
 ```
 
-| chr\_1 | X.nf.gwas.pipeline.data.vcf.vcf\_file1.vcf.gz |
-| :----- | :-------------------------------------------- |
+| chr\_1 | /nf-gwas-pipeline/data/vcf/vcf\_file1.vcf.gz  |
 | chr\_2 | /nf-gwas-pipeline/data/vcf/vcf\_file2.vcf.gz  |
 | chr\_3 | /nf-gwas-pipeline/data/vcf/vcf\_file3.vcf.gz  |
 | chr\_4 | /nf-gwas-pipeline/data/vcf/vcf\_file4.vcf.gz  |
@@ -238,7 +237,6 @@ kable(grm[1:5,1:5])
 ```
 
 |         |     HG00110 |     HG00116 |     HG00120 |     HG00128 |     HG00136 |
-| ------- | ----------: | ----------: | ----------: | ----------: | ----------: |
 | HG00110 |   1.0332116 | \-0.0179534 |   0.0070812 | \-0.0114037 | \-0.0122968 |
 | HG00116 | \-0.0179534 |   0.9901158 |   0.1161200 | \-0.0369330 | \-0.0204240 |
 | HG00120 |   0.0070812 |   0.1161200 |   0.9772376 | \-0.0595185 | \-0.0337373 |
@@ -272,8 +270,7 @@ map.dat <- read.csv("./data/1KG_vcf.csv")
 kable(head(map.dat))
 ```
 
-| chr\_1 | X.nf.gwas.pipeline.data.1KG\_vcf.1KG\_phase3\_subset\_chr1.vcf.gz |
-| :----- | :---------------------------------------------------------------- |
+| chr\_1 | /nf-gwas-pipeline/data/1KG\_vcf.1KG\_phase3\_subset\_chr1.vcf.gz  |
 | chr\_2 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr2.vcf.gz  |
 | chr\_3 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr3.vcf.gz  |
 | chr\_4 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr4.vcf.gz  |
@@ -322,8 +319,7 @@ map.dat <- read.csv("./data/1KG_vcf.csv")
 kable(head(map.dat))
 ```
 
-| chr\_1 | X.nf.gwas.pipeline.data.1KG\_vcf.1KG\_phase3\_subset\_chr1.vcf.gz |
-| :----- | :---------------------------------------------------------------- |
+| chr\_1 | /nf-gwas-pipeline/data/1KG\_vcf.1KG\_phase3\_subset\_chr1.vcf.gz |
 | chr\_2 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr2.vcf.gz  |
 | chr\_3 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr3.vcf.gz  |
 | chr\_4 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr4.vcf.gz  |
@@ -372,8 +368,7 @@ map.dat <- read.csv("./data/1KG_vcf.csv")
 kable(head(map.dat))
 ```
 
-| chr\_1 | X.nf.gwas.pipeline.data.1KG\_vcf.1KG\_phase3\_subset\_chr1.vcf.gz |
-| :----- | :---------------------------------------------------------------- |
+| chr\_1 | /nf-gwas-pipeline/data/1KG\_vcf.1KG\_phase3\_subset\_chr1.vcf.gz  |
 | chr\_2 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr2.vcf.gz  |
 | chr\_3 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr3.vcf.gz  |
 | chr\_4 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr4.vcf.gz  |
