@@ -14,7 +14,7 @@ authors:
   - name: Anthony Federico
     affiliation: "2, 4"
   - name: Stefano Monti
-    affiliation: "2","4"
+    affiliation: "2, 4"
   - name: Paola Sebastiani
     affiliation: "3"
 affiliations:
@@ -64,29 +64,10 @@ Output files are automatically arranged in a nested folder structure (Fig. 1). E
 # Conclusions and Discussions
 The GWAS pipeline provides a user-friendly one-step analysis tool. The workflow balances flexibility and reproducibility by requiring limited options and parameters. To run more study- specific analyses, users may need to modify some parameters in the original scripts. While three types of analyses are currently available, the Nextflow-based pipeline is easy to extend with new tools and methods. We plan to include more complex models and analyses, such as survival analysis, in the next versions of the pipeline.
 
-# Citations
-
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
-
-If you want to cite a software repository URL (e.g. something on GitHub without a preferred
-citation) then you can do it with the example BibTeX entry below for @fidgit.
-
-For a quick reference, the following citation commands can be used:
-- `@author:2001`  ->  "Author et al. (2001)"
-- `[@author:2001]` -> "(Author et al., 2001)"
-- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
-
 # Figures
-
-Figures can be included like this:
-![Caption for example figure.\label{fig:example}](figure.png)
-and referenced from text using \autoref{fig:example}.
+![Figure 1](https://github.com/montilab/nf-gwas-pipeline/blob/joss-paper-branch/README_files/figure-gfm/unnamed-chunk-3-1.png)
 
 # Acknowledgements
-
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
+We also thank for Harold Bae and Aparna Bhutkar for their help.
 
 # References
