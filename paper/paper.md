@@ -61,7 +61,7 @@ There are two methods for executing the pipeline. Users can execute the pipeline
 ## Output and Error Handling
 Output files are automatically arranged in a nested folder structure (Fig. 1). Each lowest-level subfolder holds output and log files from executed process. In addition, Nextflow creates its own work folder to hold intermediate output files, which serves as a record of a run. If errors are encountered in a run, users can fix the specific error and re-run the pipeline with the “-resume” command. Once resumed, the pipeline automatically uses the cached files from the previous run and continues processes that have been fixed [3].
 
-## Conclusions and Discussions
+# Conclusions and Discussions
 The GWAS pipeline provides a user-friendly one-step analysis tool. The workflow balances flexibility and reproducibility by requiring limited options and parameters. To run more study- specific analyses, users may need to modify some parameters in the original scripts. While three types of analyses are currently available, the Nextflow-based pipeline is easy to extend with new tools and methods. We plan to include more complex models and analyses, such as survival analysis, in the next versions of the pipeline.
 
 # Citations
