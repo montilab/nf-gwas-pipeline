@@ -1,48 +1,41 @@
 ---
-title: 'Gala: A Python package for galactic dynamics'
+title: 'nf-gwas-pipeline: A Nextflow Genome-Wide Association Study Pipeline'
 tags:
-  - Python
-  - astronomy
-  - dynamics
-  - galactic dynamics
-  - milky way
+  - R
+  - Nextflow
+  - GWAS
+  - gene-based analysis
+  - longitudianl GWAS
 authors:
-  - name: Adrian M. Price-Whelan^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]
-    orcid: 0000-0003-0872-7098
-    affiliation: "1, 2" # (Multiple affiliations must be quoted)
-  - name: Author Without ORCID
-    affiliation: 2
-  - name: Author with no affiliation
-    affiliation: 3
+  - name: Zeyuan Song
+    affiliation: "1" # (Multiple affiliations must be quoted)
+  - name: Anastasia Gurinovich
+    affiliation: 1
+  - name: Anthony Federico
+    affiliation: "2","4"
+  - name: Stefano Monti
+    affiliation: "2","4"
+  - name: Paola Sebastiani
+    affiliation: "3"
 affiliations:
- - name: Lyman Spitzer, Jr. Fellow, Princeton University
+ - name: Department of Biostatistics, Boston University School of Public Health, 801 Massachusetts Avenue 3rd Floor, Boston, MA 02218, USA
    index: 1
- - name: Institution Name
+ - name: Section of Computational Biomedicine, Boston University School of Medicine, 72 East Concord St., Boston, MA 02218, USA
    index: 2
- - name: Independent Researcher
+ - name: Institute for Clinical Research and Health Policy Studies, Tufts Medical Center, 800 Washington Street, Boston, MA 02111, USA
    index: 3
-date: 13 August 2017
+ - name: Bioinformatics Program, Boston University, 24 Cummington Mall, Boston, MA 02215, USA
+   index: 4
+date: 21 November 2020
 bibliography: paper.bib
 
-# Optional fields if submitting to a AAS journal too, see this blog post:
-# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-aas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.
-aas-journal: Astrophysical Journal <- The name of the AAS journal.
 ---
 
 # Summary
 
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
+A tool for conducting Genome-Wide Association Study (GWAS) in a systematic, automated and reproducible manner is overdue. We developed an automated GWAS pipeline by combining multiple analysis tools – including bcftools, vcftools, the R packages SNPRelate/GENESIS/GMMAT and ANNOVAR – through Nextflow, which is a portable, flexible, and reproducible reactive workflow framework for developing pipelines. The GWAS pipeline integrates the steps of data quality control and assessment and genetic association analyses, including analysis of cross-sectional and longitudinal studies with either single variants or gene-based tests, into a unified analysis workflow. The pipeline is implemented in Nextflow, dependencies are distributed through Docker, and the code is publicly available on Github.
 
-# Statement of need
+# Introduction
 
 `Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
 enables wrapping low-level languages (e.g., C) for speed without losing
