@@ -6,8 +6,8 @@
 A Nextflow Genome-Wide Association Study (GWAS) Pipeline
 
 [![Built
-With](https://img.shields.io/badge/Built%20With-Nextflow-brightgreen.svg)](https://www.nextflow.io/)
-![Compatibility](https://img.shields.io/badge/Compatibility-Linux%20%2F%20OSX-blue.svg)
+With](https://img.shields.io/badge/Built+With-Nextflow-brightgreen.svg)](https://www.nextflow.io/)
+![Compatibility](https://img.shields.io/badge/Compatibility-Linux+%2F+OSX-blue.svg)
 [![GitHub
 Issues](https://img.shields.io/github/issues/montilab/nf-gwas-pipeline.svg)](https://github.com/montilab/nf-gwas-pipeline/issues)
 
@@ -185,17 +185,18 @@ kable(head(pheno.dat))
              ./data/1KG_vcf.csv
 
 ``` r
-map.dat <- read.csv("./data/toy_vcf.csv")
+map.dat <- read.csv("./data/toy_vcf.csv", header=F)
 kable(head(map.dat))
 ```
 
-| chr\_1 | /nf-gwas-pipeline/data/vcf/vcf\_file1.vcf.gz  |
-| chr\_2 | /nf-gwas-pipeline/data/vcf/vcf\_file2.vcf.gz  |
-| chr\_3 | /nf-gwas-pipeline/data/vcf/vcf\_file3.vcf.gz  |
-| chr\_4 | /nf-gwas-pipeline/data/vcf/vcf\_file4.vcf.gz  |
-| chr\_5 | /nf-gwas-pipeline/data/vcf/vcf\_file5.vcf.gz  |
-| chr\_6 | /nf-gwas-pipeline/data/vcf/vcf\_file6.vcf.gz  |
-| chr\_7 | /nf-gwas-pipeline/data/vcf/vcf\_file7.vcf.gz  |
+| V1     | V2                                                                                                           |
+| :----- | :----------------------------------------------------------------------------------------------------------- |
+| chr\_1 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/vcf/vcf\_file1.vcf.gz |
+| chr\_2 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/vcf/vcf\_file2.vcf.gz |
+| chr\_3 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/vcf/vcf\_file3.vcf.gz |
+| chr\_4 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/vcf/vcf\_file4.vcf.gz |
+| chr\_5 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/vcf/vcf\_file5.vcf.gz |
+| chr\_6 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/vcf/vcf\_file6.vcf.gz |
 
 ### Optional Input File Formats
 
@@ -237,6 +238,7 @@ kable(grm[1:5,1:5])
 ```
 
 |         |     HG00110 |     HG00116 |     HG00120 |     HG00128 |     HG00136 |
+| ------- | ----------: | ----------: | ----------: | ----------: | ----------: |
 | HG00110 |   1.0332116 | \-0.0179534 |   0.0070812 | \-0.0114037 | \-0.0122968 |
 | HG00116 | \-0.0179534 |   0.9901158 |   0.1161200 | \-0.0369330 | \-0.0204240 |
 | HG00120 |   0.0070812 |   0.1161200 |   0.9772376 | \-0.0595185 | \-0.0337373 |
@@ -266,17 +268,18 @@ kable(head(pheno.dat))
 ##### 2\. Mapping file
 
 ``` r
-map.dat <- read.csv("./data/1KG_vcf.csv")
+map.dat <- read.csv("./data/1KG_vcf.csv", header=F)
 kable(head(map.dat))
 ```
 
-| chr\_1 | /nf-gwas-pipeline/data/1KG\_vcf.1KG\_phase3\_subset\_chr1.vcf.gz  |
-| chr\_2 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr2.vcf.gz  |
-| chr\_3 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr3.vcf.gz  |
-| chr\_4 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr4.vcf.gz  |
-| chr\_5 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr5.vcf.gz  |
-| chr\_6 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr6.vcf.gz  |
-| chr\_7 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr7.vcf.gz  |
+| V1     | V2                                                                                                                               |
+| :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| chr\_1 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr1.vcf.gz |
+| chr\_2 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr2.vcf.gz |
+| chr\_3 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr3.vcf.gz |
+| chr\_4 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr4.vcf.gz |
+| chr\_5 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr5.vcf.gz |
+| chr\_6 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr6.vcf.gz |
 
 ##### 3\. Genotype file
 
@@ -315,17 +318,18 @@ kable(head(pheno.dat))
 ##### 2\. Mapping file
 
 ``` r
-map.dat <- read.csv("./data/1KG_vcf.csv")
+map.dat <- read.csv("./data/1KG_vcf.csv", header=F)
 kable(head(map.dat))
 ```
 
-| chr\_1 | /nf-gwas-pipeline/data/1KG\_vcf.1KG\_phase3\_subset\_chr1.vcf.gz |
-| chr\_2 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr2.vcf.gz  |
-| chr\_3 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr3.vcf.gz  |
-| chr\_4 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr4.vcf.gz  |
-| chr\_5 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr5.vcf.gz  |
-| chr\_6 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr6.vcf.gz  |
-| chr\_7 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr7.vcf.gz  |
+| V1     | V2                                                                                                                               |
+| :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| chr\_1 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr1.vcf.gz |
+| chr\_2 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr2.vcf.gz |
+| chr\_3 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr3.vcf.gz |
+| chr\_4 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr4.vcf.gz |
+| chr\_5 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr5.vcf.gz |
+| chr\_6 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr6.vcf.gz |
 
 ##### 3\. Genotype file
 
@@ -364,17 +368,18 @@ kable(head(pheno.dat))
 ##### 2\. Mapping file
 
 ``` r
-map.dat <- read.csv("./data/1KG_vcf.csv")
+map.dat <- read.csv("./data/1KG_vcf.csv", header=F)
 kable(head(map.dat))
 ```
 
-| chr\_1 | /nf-gwas-pipeline/data/1KG\_vcf.1KG\_phase3\_subset\_chr1.vcf.gz  |
-| chr\_2 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr2.vcf.gz  |
-| chr\_3 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr3.vcf.gz  |
-| chr\_4 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr4.vcf.gz  |
-| chr\_5 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr5.vcf.gz  |
-| chr\_6 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr6.vcf.gz  |
-| chr\_7 | /nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr7.vcf.gz  |
+| V1     | V2                                                                                                                               |
+| :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| chr\_1 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr1.vcf.gz |
+| chr\_2 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr2.vcf.gz |
+| chr\_3 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr3.vcf.gz |
+| chr\_4 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr4.vcf.gz |
+| chr\_5 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr5.vcf.gz |
+| chr\_6 | /rprojectnb2/necs/Zeyuan\_Analysis/GWASpipeline/nf-gwas-pipeline/nf-gwas-pipeline/data/1KG\_vcf/1KG\_phase3\_subset\_chr6.vcf.gz |
 
 ##### 3\. Genotype file
 
