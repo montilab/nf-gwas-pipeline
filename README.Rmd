@@ -11,8 +11,8 @@ knitr::opts_chunk$set(message=FALSE, comment="#>")
 # nf-gwas-pipeline
 A Nextflow Genome-Wide Association Study (GWAS) Pipeline
 
-[![Built With](https://img.shields.io/badge/Built%20With-Nextflow-brightgreen.svg)](https://www.nextflow.io/)
-![Compatibility](https://img.shields.io/badge/Compatibility-Linux%20%2F%20OSX-blue.svg)
+[![Built With](https://img.shields.io/badge/Built+With-Nextflow-brightgreen.svg)](https://www.nextflow.io/)
+![Compatibility](https://img.shields.io/badge/Compatibility-Linux+%2F+OSX-blue.svg)
 [![GitHub Issues](https://img.shields.io/github/issues/montilab/nf-gwas-pipeline.svg)](https://github.com/montilab/nf-gwas-pipeline/issues)
 
 # Installation
@@ -181,7 +181,7 @@ example: ./data/toy_vcf.csv
 ```
 
 ```{r}
-map.dat <- read.csv("./data/toy_vcf.csv")
+map.dat <- read.csv("./data/toy_vcf.csv", header=F)
 kable(head(map.dat))
 ```
 
@@ -222,7 +222,7 @@ kable(head(pheno.dat))
 
 ##### 2. Mapping file
 ```{r}
-map.dat <- read.csv("./data/1KG_vcf.csv")
+map.dat <- read.csv("./data/1KG_vcf.csv", header=F)
 kable(head(map.dat))
 ```
 
@@ -250,7 +250,7 @@ kable(head(pheno.dat))
 ##### 2. Mapping file
 
 ```{r}
-map.dat <- read.csv("./data/1KG_vcf.csv")
+map.dat <- read.csv("./data/1KG_vcf.csv", header=F)
 kable(head(map.dat))
 ```
 
@@ -278,7 +278,7 @@ kable(head(pheno.dat))
 ##### 2. Mapping file
 
 ```{r}
-map.dat <- read.csv("./data/1KG_vcf.csv")
+map.dat <- read.csv("./data/1KG_vcf.csv", header=F)
 kable(head(map.dat))
 ```
 
