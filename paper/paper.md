@@ -65,7 +65,7 @@ Output files are automatically arranged in a nested folder structure (Fig. 1). E
 The GWAS pipeline provides a user-friendly one-step analysis tool. The workflow balances flexibility and reproducibility by requiring limited options and parameters. To run more study- specific analyses, users may need to modify some parameters in the original scripts. While three types of analyses are currently available, the Nextflow-based pipeline is easy to extend with new tools and methods. We plan to include more complex models and analyses, such as survival analysis, in the next versions of the pipeline.
 
 # Figures
-![Figure 1](https://github.com/montilab/nf-gwas-pipeline/blob/joss-paper-branch/README_files/figure-gfm/unnamed-chunk-3-1.png)
+![Figure 1](https://github.com/montilab/nf-gwas-pipeline/README_files/figure-gfm/unnamed-chunk-3-1.png)
 
 # Acknowledgements
 We also thank for Harold Bae and Aparna Bhutkar for their help.
