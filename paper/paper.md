@@ -55,7 +55,7 @@ Figure 1 depicts the workflow:
 A single configuration file containing all the pipeline options and parameters is provided. Users can customize this file to deploy specific analysis processes. For example, a user may run a GWAS on a cohort of unrelated individuals by turning off the GRM step. To reduce the complexity for new users, only essential parameters are modifiable in the configuration file. Advanced users can modify any parameters by diving into the original code.
 
 ## Installation and Execution
-The pipeline can be cloned from github.com/montilab/nf-gwas-pipeline. A Docker container was built to assist in installing the necessary tools and the pipeline and ensuring accessibility to specific versions of tools and packages.
+The pipeline can be cloned from https://github.com/montilab/nf-gwas-pipeline. A Docker container was built to assist in installing the necessary tools and the pipeline and ensuring accessibility to specific versions of tools and packages.
 There are two methods for executing the pipeline. Users can execute the pipeline through the command line interface specifying parameters and a configuration file. All available options can be either obtained by the command ‘--help' or from the configuration file. If a configuration file is specified, users should set paths for all input files and specify the analysis with corresponding parameters. Once file paths and parameters are set, the execution can be either run locally or scaled up to various high-performance computing environments.
 
 ## Output and Error Handling
