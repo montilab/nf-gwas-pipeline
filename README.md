@@ -118,6 +118,7 @@ the pipeline as follows.
     $ module load bcftools
     $ module load plink/2.00a1LM
     $ module load annovar/2018apr
+    $ module load pandoc
     
     nextflow gwas.nf -c gwas.config
 
