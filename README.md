@@ -111,7 +111,11 @@ Succeeded   : 141
 
 If you are running the pipeline on a HPC that does not support docker
 (BU’s Shared Computing Cluster), you can load the dependencies and run
-the pipeline as follows.
+the pipeline as follows. (In addition, you need to install following R 
+packages: SeqArray, GENESIS, Biobase, SeqVarTools, dplyr, SNPRelate,
+ggplot2, data.table, reshape2, latex2exp, knitr, EBImage, GenomicRanges,
+TxDb.Hsapiens.UCSC.hg19.knownGene, GMMAT)
+
 
     $ module load R/3.6.0
     $ module load vcftools
