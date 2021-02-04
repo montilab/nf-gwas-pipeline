@@ -21,8 +21,8 @@ out.dat <- combine.dat[maf*2*combine.dat$N>0.99,]
 print(paste0("variants with at least 1 copy : ", dim(out.dat)[1]))
 
 if (model == "logistic") {
-	case.maf <- ifelse(combine.dat$case.caf>0.5, 1-combine.dat$case.caf, combine.dat$case.caf)
-	control.maf <- ifelse(combine.dat$control.caf>0.5, 1-combine.dat$control.caf, combine.dat$control.caf)
+	case.maf <- ifelse(out.dat$case.caf>0.5, 1-out.dat$case.caf, out.dat$case.caf)
+	control.maf <- ifelse(out.dat$control.caf>0.5, 1-out.dat$control.caf, out.dat$control.caf)
 
 	out.dat <- out.dat[(case.maf*2*out.dat$n.case>0.99)&(control.maf*2*out.dat$n.control>0.99),]
 	print(paste0("variants with at least 1 copy in both case&control : ", dim(out.dat)[1]))
