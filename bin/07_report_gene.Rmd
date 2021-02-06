@@ -20,13 +20,15 @@ suppressPackageStartupMessages(library(EBImage))
 The number of SNPs included in the gds file for each chromosome and total:
 ```{r include=FALSE}
 snp.n.gds <- c()
+chr <- c()
 for(i in 1:22){
-  gds <- seqOpen(paste0(outdir,"/GDS/gds_files/chr_",i,".gds"))
-  snp.n.gds <- c(snp.n.gds, length(seqGetData(gds, "variant.id")))
-  seqClose(gds)
+  try(gds <- seqOpen(paste0(outdir,"/GDS/gds_files/chr_",i,".gds")))
+  try(snp.n.gds <- c(snp.n.gds, length(seqGetData(gds, "variant.id"))))
+  try(chr <- c(chr, paste0("chr",seqGetData(gds, "chromosome")[1])))
+  try(seqClose(gds))
 }
 snp.n.gds <- c(snp.n.gds, sum(snp.n.gds))
-chr <- c(paste0("chr", 1:22), "Total")
+chr <- c(chr, "Total")
 dat.gds <- data.frame(count=snp.n.gds)
 rownames(dat.gds) <- chr
 ```
