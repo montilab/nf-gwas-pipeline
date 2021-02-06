@@ -19,13 +19,15 @@ suppressPackageStartupMessages(library(EBImage))
 The number of SNPs included in the gds file for each chromosome and total:
 ```{r include=FALSE}
 snp.n.gds <- c()
+chr <- c()
 for(i in 1:22){
-  gds <- seqOpen(paste0(outdir,"/GDS/gds_files/chr_",i,".gds"))
-  snp.n.gds <- c(snp.n.gds, length(seqGetData(gds, "variant.id")))
-  seqClose(gds)
+  try(gds <- seqOpen(paste0(outdir,"/GDS/gds_files/chr_",i,".gds")))
+  try(snp.n.gds <- c(snp.n.gds, length(seqGetData(gds, "variant.id"))))
+  try(chr <- c(chr, paste0("chr",seqGetData(gds, "chromosome")[1])))
+  try(seqClose(gds))
 }
 snp.n.gds <- c(snp.n.gds, sum(snp.n.gds))
-chr <- c(paste0("chr", 1:22), "Total")
+chr <- c(chr, "Total")
 dat.gds <- data.frame(count=snp.n.gds)
 rownames(dat.gds) <- chr
 ```
@@ -39,7 +41,8 @@ snp.n.r <- c()
 for(i in 1:22){
   try(result <- fread(paste0(outdir,"/Association_Test/gwas/chr_",i,".csv"), stringsAsFactors = F, header = T))
   try(result <- fread(paste0(outdir,"/Association_Test/gwla/chr_",i,".txt"), sep="\t", stringsAsFactors = F, header = T))
-  snp.n.r <- c(snp.n.r, dim(result)[1])
+  try(snp.n.r <- c(snp.n.r, dim(result)[1]))
+  result <- NULL
 }
 snp.n.r <- c(snp.n.r, sum(snp.n.r))
 missing.rate <- round(1-snp.n.r/snp.n.gds, digits = 3)
@@ -54,8 +57,9 @@ The number of SNPs with valid analysis results (2NxMAF>1):
 ```{r include=FALSE}
 snp.n.f <- c()
 for(i in 1:22){
-  result <- fread(paste0(outdir,"/Summary_Plot/merge_by_chr/chr_",i,"_caf_annotated.csv"))
-  snp.n.f <- c(snp.n.f, dim(result)[1])
+  try(result <- fread(paste0(outdir,"/Summary_Plot/merge_by_chr/chr_",i,"_caf_annotated.csv")))
+  try(snp.n.f <- c(snp.n.f, dim(result)[1]))
+  result <- NULL
 }
 snp.n.f <- c(snp.n.f, sum(snp.n.f))
 missing.rate <- round(1-snp.n.f/snp.n.r, digits = 3)
