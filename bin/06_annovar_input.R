@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 args<-commandArgs(TRUE)
-max_pval <- args[1]
+max_pval <- as.numeric(args[1])
 
 sink('annovar_input.log', append=FALSE, split=TRUE)
 date()
