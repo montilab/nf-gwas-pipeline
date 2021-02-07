@@ -123,5 +123,5 @@ try(display(manhattan2))
 annotated.results <- fread(paste0(outdir, "/Annotation/annotated_results/top_snps_annotation.csv"), header=T, stringsAsFactors=F)
 ```
 ```{r}
-kable(annotated.results)
+kable(annotated.results, digits = 500)
 ```
