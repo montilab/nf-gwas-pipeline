@@ -6,7 +6,7 @@ title: "Gene-Based Tests Report"
 #!/usr/bin/env Rscript
 args<-commandArgs(TRUE)
 outdir <- args[1]
-max_pval <- args[2]
+max_pval <- as.numeric(args[2])
 ```
 
 ```{r include=FALSE}
