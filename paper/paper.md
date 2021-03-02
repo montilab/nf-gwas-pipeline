@@ -45,6 +45,7 @@ The pipeline is implemented in Nextflow, a portable, scalable and parallelizable
 
 ## Workflow
 Figure 1 depicts the workflow:
+
 1. Input. Required files include VCF files for all 22 chromosomes and a comma-delimited phenotype file including sample id, phenotype and covariates. Optionally, users can provide a file with a list of Single Nucleotide Polymorphisms (SNPs) to compute genome-wide principal components and genetic relationship or provide a kinship matrix for known relations.
 2. Quality control. The pipeline removes monomorphic SNPs and variants with percent of missing values above a provided threshold. The cleaned VCF files are then converted into Genome Data Structure (GDS) file format for computationally efficient data storage [@Zheng:2017].
 3. Principal component analysis and genetic relationship inference. This is an optional step that uses the PC-AiR and PC-Relate algorithms [@Conomos:2015][@Conomos:2016] to estimate the genetic relationship matrix between study subjects (GRM) and genome-wide principal components (PCs) to adjust for population structure. Users have the option to provide their own PCs as covariates and/or GRM.
@@ -68,6 +69,6 @@ The GWAS pipeline provides a user-friendly one-step analysis tool. The workflow 
 ![Figure 1](nf-gwas-pipeline.png)
 
 # Acknowledgements
-We also thank for Harold Bae and Aparna Bhutkar for their help.
+We thank for Harold Bae and Aparna Bhutkar for their help.
 
 # References
