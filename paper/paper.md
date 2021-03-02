@@ -37,7 +37,7 @@ A tool for conducting Genome-Wide Association Study (GWAS) in a systematic, auto
 
 # Statement of need
 
-Genome-Wide Association Studies (GWAS) have led to the discovery of highly reproducible variants associated with human complex traits and diseases [@Tam:2019]. Many software tools are available for conducting GWAS using cross-sectional data and standard multivariable linear or logistic regression. However, the analysis of longitudinal or family-based studies requires the use of advanced statistical methods such as mixed effect modeling, or survival analysis. To conduct a GWAS with such complex data, often investigators have to rely on multiple programs and ad-hoc linking the results generated between steps because each program focuses on a specific aspect of the analysis [@Eller:2019]. This approach makes it difficult to keep track of all the analysis steps and parameters, including data cleaning, filtering, and calculation of the genome- wide principal components, limiting reproducibility of the analyses. To address these problems, we have developed a GWAS pipeline that provides a comprehensive computing environment to manage genome-wide genotype data, to conduct analyses of continuous and binary traits using mixed effect models, and to summarize, annotate, and visualize the results.
+Genome-Wide Association Studies (GWAS) have led to the discovery of highly reproducible variants associated with human complex traits and diseases [@Tam:2019]. Many software tools are available for conducting GWAS using cross-sectional data and standard multivariable linear or logistic regression. However, the analysis of longitudinal or family-based studies requires the use of advanced statistical methods such as mixed effect modeling, or survival analysis. To conduct a GWAS with such complex data, often investigators have to rely on multiple programs and ad-hoc linking the results generated between steps because each program focuses on a specific aspect of the analysis [@Eller:2019]. This approach makes it difficult to keep track of all the analysis steps and parameters, including data cleaning, filtering, and calculation of the genome-wide principal components, limiting reproducibility of the analyses. To address these problems, we have developed a GWAS pipeline that provides a comprehensive computing environment to manage genome-wide genotype data, to conduct analyses of continuous and binary traits using mixed effect models, and to summarize, annotate, and visualize the results.
 
 # Materials and Methods
 ## Features
@@ -69,6 +69,6 @@ The GWAS pipeline provides a user-friendly one-step analysis tool. The workflow 
 ![Figure 1](nf-gwas-pipeline.png)
 
 # Acknowledgements
-We thank for Harold Bae and Aparna Bhutkar for their help.
+We thank for Harold Bae and Aparna Bhutkar for their help. This work was supported with funding from NIH/NIA: U19AG023122 (Longevity Consortium), and UH2AG064704 (Omics Profiles in Centenarians)
 
 # References
