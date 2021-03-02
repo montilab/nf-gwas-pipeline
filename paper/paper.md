@@ -69,6 +69,6 @@ The GWAS pipeline provides a user-friendly one-step analysis tool. The workflow 
 ![Figure 1](nf-gwas-pipeline.png)
 
 # Acknowledgements
-We thank for Harold Bae and Aparna Bhutkar for their help. This work was supported with funding from NIH/NIA: U19AG023122 (Longevity Consortium), and UH2AG064704 (Omics Profiles in Centenarians)
+We thank for Harold Bae and Aparna Bhutkar for their help. This work was supported with funding from NIH/NIA: U19AG023122 (Longevity Consortium), and UH2AG064704 (Omics Profiles in Centenarians).
 
 # References
