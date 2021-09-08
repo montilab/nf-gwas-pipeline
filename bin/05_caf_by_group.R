@@ -3,15 +3,17 @@ args = commandArgs(trailingOnly=TRUE)
 gds.file <- args[1]
 pheno.file <- args[2]
 analysis.sample.id <- args[3]
-model <- args[4]
-phenotypes <- args[5]
-group <- args[6]  
-out.file <- args[7]
-log.file <- args[8]
+dose <- args[4]
+model <- args[5]
+phenotypes <- args[6]
+group <- args[7]  
+out.file <- args[8]
+log.file <- args[9]
 
 sink(log.file, append=FALSE, split=TRUE)
 date()
 suppressPackageStartupMessages(library(SeqArray))
+suppressPackageStartupMessages(library(SNPRelate))
 suppressPackageStartupMessages(library(reshape2))
 
 ####Open GDS
@@ -31,11 +33,12 @@ if(sum(colnames(pheno.dat)%in%c(group))==1){
 	for(i in 1:length(group_names)){
 		group.id <- pheno.dat[pheno.dat[,group]==group_names[i],]$sample.id
 		seqSetFilter(gds, sample.id = group.id)
-		genotype.dat <- seqGetData(gds, "genotype")
-		genotype <- genotype.dat[1,,]+genotype.dat[2,,]
-		caf <- apply(genotype,2,sum)/dim(genotype)[1]/2
-		try(dosage.dat <- seqGetData(gds, "annotation/format/DS")$data)
-		try(dosage <- apply(dosage.dat,2,sum)/dim(dosage.dat)[1]/2)
+		caf <- snpgdsSNPRateFreq(gds, sample.id = group.id)
+		caf <- 1-caf$AlleleFreq
+		if(dose=="true"){
+		  try(dosage.dat <- seqGetData(gds, "annotation/format/DS")$data)
+		  try(dosage <- apply(dosage.dat,2,sum)/dim(dosage.dat)[1]/2)
+		}
 		seqResetFilter(gds)
 		out.caf <- cbind(out.caf, caf)
 		try(out.dosage <- cbind(out.dosage, dosage))
@@ -59,20 +62,22 @@ if(sum(colnames(pheno.dat)%in%c(group))==1){
 if (model == "logistic") {
 	case.id <- pheno.dat[pheno.dat[,phenotypes]==1,]$sample.id
 	seqSetFilter(gds, sample.id = case.id)
-	genotype.dat <- seqGetData(gds,"genotype")
-	genotype <- genotype.dat[1,,]+genotype.dat[2,,]
-	case.caf <- apply(genotype,2,sum)/dim(genotype)[1]/2
-	try(dosage.dat <- seqGetData(gds, "annotation/format/DS")$data)
-	try(case.dosage <- apply(dosage.dat,2,sum)/dim(dosage.dat)[1]/2)
+	case.caf <- snpgdsSNPRateFreq(gds, sample.id = case.id)
+	case.caf <- 1-case.caf$AlleleFreq
+	if(dose=="true"){
+	  try(dosage.dat <- seqGetData(gds, "annotation/format/DS")$data)
+	  try(dosage <- apply(dosage.dat,2,sum)/dim(dosage.dat)[1]/2)
+	}
 	seqResetFilter(gds)
 	
 	control.id <- pheno.dat[pheno.dat[,phenotypes]==0,]$sample.id
 	seqSetFilter(gds, sample.id = control.id)
-	genotype.dat <- seqGetData(gds,"genotype")
-	genotype <- genotype.dat[1,,]+genotype.dat[2,,]
-	control.caf <- apply(genotype,2,sum)/dim(genotype)[1]/2
-	try(dosage.dat <- seqGetData(gds, "annotation/format/DS")$data)
-	try(control.dosage <- apply(dosage.dat,2,sum)/dim(dosage.dat)[1]/2)
+	control.caf <- snpgdsSNPRateFreq(gds, sample.id = control.id)
+	control.caf <- 1-control.caf$AlleleFreq
+	if(dose=="true"){
+	  try(dosage.dat <- seqGetData(gds, "annotation/format/DS")$data)
+	  try(dosage <- apply(dosage.dat,2,sum)/dim(dosage.dat)[1]/2)
+	}
 	seqResetFilter(gds)
 
 	out.caf.dosage$n.case <- length(case.id)
@@ -88,8 +93,10 @@ seqSetFilter(gds, sample.id = analysis.sample.id)
 genotype.dat <- seqGetData(gds, "genotype")
 genotype <- genotype.dat[1,,]+genotype.dat[2,,]
 caf <- apply(genotype,2,sum)/dim(genotype)[1]/2
-try(dosage.dat <- seqGetData(gds, "annotation/format/DS")$data)
-try(dosage <- apply(dosage.dat,2,sum)/dim(dosage.dat)[1]/2)
+if(dose=="true"){
+  try(dosage.dat <- seqGetData(gds, "annotation/format/DS")$data)
+  try(dosage <- apply(dosage.dat,2,sum)/dim(dosage.dat)[1]/2)
+}
 seqResetFilter(gds)
 
 out.caf.dosage$caf <- caf
