@@ -6,11 +6,16 @@ USER INPUT PARAMETERS
 */
 date = new Date().format( 'yyyyMMdd' )
 
+params.gds_input   = false
 params.vcf_list    = null
+params.gds_list    = null
 params.pheno       = null
 
-params.phenotype  = null
+params.phenotype   = null
 params.covars      = null
+
+params.qc          = true
+params.max_missing = 0.99
 
 params.pca_grm     = false
 params.snpset      = null
@@ -30,6 +35,7 @@ params.longitudinal = false
 params.random_slope = "null"
 
 params.group               = null
+params.dosage              = false
 params.min_maf             = 0.1
 params.max_pval_manhattan  = 0.5
 
@@ -60,8 +66,12 @@ Mandatory arguments:
 --phenotype                String        Name of the phenotype column
 
 Optional arguments:
+--gds_input                Logical       If true, ignore vcf input, start with GDS files and skip qc_miss, qc_mono, vcf_to_gds steps
+--gds_list                 String        Path to the two-column mapping gds file: id , file_path 
 --outdir                   String        Path to the master folder to store all results
 --covars                   String        Name of the covariates to include in analysis model separated by comma (e.g. "age,sex,educ")
+--qc                       Logical       If true, run qc_miss(filter genotypes called below max_missing) and qc_mono (drop monomorphic SNPs)
+--max_missing              Numeric       Threshold for qc_miss (filter genotypes called below this value)
 --pca_grm                  Logical       If true, run PCAiR (generate PCA in Related individuals) and PCRelate (generate genomic relationship matrix)
 --snpset                   String        Path to the two column txt file separated by comma: chr,pos (can only be effective when pca_grm = true)
 --grm                      String        Path to the genomic relationship matrix (can only be effective when pca_grm = false)
@@ -75,6 +85,7 @@ Optional arguments:
 --longitudinal             Logical       If true, run genome-wide longitudianl analysis
 --random_slope             String        if set to "null", random intercept only model is run; else run random slope and random intercept model
 --group                    String        Name of the group variable based on which the allele frequencies in each subgroup is calculated (can be left empty)
+--dosage                   Logical       If true, also calculate dosages in addition to allele frequencies (can be very slow with large single gds input)
 --min_maf                  Numeric       Threshold for minimun minor allele frequencies of SNPs to include in QQ- and Manhattan-plot
 --max_pval_manhattan       Numeric       Threshold for maximun p-value of SNPs to show in Manhattan-plot 
 --max_pval                 Numeric       Threshold for maxumun p-value of SNPs to annotate
@@ -94,6 +105,7 @@ G W A S  ~  P I P E L I N E
 outdir    : $params.outdir
 
 vcf       : $params.vcf_list
+gds       : $params.gds_list
 pheno     : $params.pheno
 snpset    : $params.snpset
 
@@ -106,15 +118,36 @@ ref       : $params.ref_genome
 -
 """
 
-// Read vcf files
-Channel
-  .fromPath(params.vcf_list).splitCsv(header: false)
-  .map {row -> tuple(row[0], file(row[1]))}
-  .ifEmpty {error "File ${params.vcf_list} not parsed properly"}
-  .set {vcf_files}
+// Read vcf or gds files
+
+if( !params.gds_input ){
+  Channel
+    .fromPath(params.vcf_list).splitCsv(header: false)
+    .map {row -> tuple(row[0], file(row[1]))}
+    .ifEmpty {error "File ${params.vcf_list} not parsed properly"}
+    .set {vcf_files}
+}
+
+if( params.gds_input ){
+  Channel
+    .fromPath(params.gds_list).splitCsv(header: false)
+    .map {row -> tuple(row[0], file(row[1]))}
+    .ifEmpty {error "File ${params.gds_list} not parsed properly"}
+    .set {gds_files_1}
+  Channel
+    .fromPath(params.gds_list).splitCsv(header: false)
+    .map {row -> tuple(row[0], file(row[1]))}
+    .ifEmpty {error "File ${params.gds_list} not parsed properly"}
+    .set {gds_files_2}
+  Channel
+    .fromPath(params.gds_list).splitCsv(header: false)
+    .map {row -> tuple(row[0], file(row[1]))}
+    .ifEmpty {error "File ${params.gds_list} not parsed properly"}
+    .set {gds_files_3}
+}
 
 /*
-** STEP 0 Configuration Check
+** STEP 0: configuration check
 */
 if( !(params.pca_grm | params.gwas | params.gene_based | params.longitudinal) ){
   log.info """
@@ -130,81 +163,121 @@ if(params.gwas&params.gene_based|params.gwas&params.longitudinal|params.gene_bas
 }
 
 /*
-** STEP 1 QC
+** STEP 1: QC
 */
-process qc_miss {
-  tag "$chr"
-  publishDir "${params.outdir}/QC/qc_miss", mode: 'copy'
+if( !params.gds_input & params.qc ){
+  process qc_miss {
+    tag "$chr"
+    publishDir "${params.outdir}/QC/qc_miss", mode: 'copy'
   
-  input:
-  set val(chr), file(vcf) from vcf_files
+    input:
+    set val(chr), file(vcf) from vcf_files
 
-  output:
-  set val(chr), file("*vcf.gz") into qc1
+    output:
+    set val(chr), file("*vcf.gz") into qc1
 
-  script:
-  """
-  vcftools --gzvcf $vcf --max-missing 0.99 --recode --stdout | gzip -c > ${chr}_qc1.vcf.gz
-  """
-}
+    script:
+    """
+    vcftools --gzvcf $vcf --max-missing 0.99 --recode --stdout | gzip -c > ${chr}_qc1.vcf.gz
+    """
+  }
 
-process qc_mono {
-  tag "$chr"
-  publishDir "${params.outdir}/QC/qc_mono", mode: 'copy'
+  process qc_mono {
+    tag "$chr"
+    publishDir "${params.outdir}/QC/qc_mono", mode: 'copy'
   
-  input:
-  set val(chr), file(vcf) from qc1
+    input:
+    set val(chr), file(vcf) from qc1
 
-  output:
-  set val(chr), file('*vcf.gz') into qc2_1, qc2_2
+    output:
+    set val(chr), file('*vcf.gz') into qc2_1, qc2_2
 
-  script:
-  """
-  bcftools view -e 'COUNT(GT="AA")=N_SAMPLES || COUNT(GT="RR")=N_SAMPLES || COUNT(GT="AR")=N_SAMPLES || COUNT(GT="RA")=N_SAMPLES' $vcf -Oz -o ${chr}_qc2.vcf.gz
-  """
+    script:
+    """
+    bcftools view -e 'COUNT(GT="AA")=N_SAMPLES || COUNT(GT="RR")=N_SAMPLES || COUNT(GT="AR")=N_SAMPLES || COUNT(GT="RA")=N_SAMPLES' $vcf -Oz -o ${chr}_qc2.vcf.gz
+    """
+  }
 }
 
 /*
-** STEP 2 vcf_to_gds
+** STEP 2: convert vcf to gds
 */
-process vcf_to_gds {
-  tag "$chr"
-  publishDir "${params.outdir}/GDS/gds_files", mode: 'copy'
+if( params.qc ){
+  process vcf_to_gds {
+    tag "$chr"
+    publishDir "${params.outdir}/GDS/gds_files", mode: 'copy'
     
-  input:
-  set val(chr), file(vcf) from qc2_1
+    input:
+    set val(chr), file(vcf) from qc2_1
 
-  output:
-  file '*'
-  file('*.gds') into gds_files_1
-  set val(chr), file('*.gds') into gds_files_2, gds_files_3
+    output:
+    file '*'
+    set val(chr), file('*.gds') into gds_files_1, gds_files_2, gds_files_3
 
-  script:
-  """
-  02_vcf_to_gds.R $vcf ${chr}.gds ${chr}_vcf_to_gds.log
-  """
+    script:
+    """
+    02_vcf_to_gds.R $vcf ${chr}.gds ${chr}_vcf_to_gds.log
+    """
+  }
 }
 
-process merge_gds {
-  publishDir "${params.outdir}/GDS/gds_merged", mode: 'copy'
+if( !params.qc & !params.gds_input ){
+  process vcf_to_gds_skip_qc {
+    tag "$chr"
+    publishDir "${params.outdir}/GDS/gds_files", mode: 'copy'
+    
+    input:
+    set val(chr), file(vcf) from vcf_files
 
-  input:
-  file(gds_files) from gds_files_1.collect()
+    output:
+    file '*'
+    set val(chr), file('*.gds') into gds_files_1, gds_files_2, gds_files_3
 
-  output:
-  file '*'
-  file 'merged.gds' into gds_merged_1, gds_merged_2, gds_merged_3
-
-  script:
-  """
-  02_merge_gds.R $gds_files
-  """
+    script:
+    """
+    02_vcf_to_gds.R $vcf ${chr}.gds ${chr}_vcf_to_gds.log
+    """
+  }
 }
 
 /*
-** STEP 3 PCA and GRM
+** STEP 3: PCA and GRM
 */
-if (params.pca_grm) {
+
+if( params.pca_grm ){
+  process pruning {
+    tag "$chr"
+    publishDir "${params.outdir}/GDS/gds_pruned", mode: 'copy'
+    
+    input:
+    set val(chr), file(gds) from gds_files_1
+        
+    output:
+    file '*_pruned.gds' into gds_pruned_1
+    file '*' into gds_pruned_2
+
+    script:
+    """
+    03_gds_pruning.R $gds ${params.pheno} ${params.phenotype} ${params.covars} ${params.snpset} ${chr}_pruning.log ${chr}_pruned.gds
+    """
+  }
+
+  process merge_pruned_gds {
+    publishDir "${params.outdir}/GDS/gds_pruned_merged", mode: 'copy'
+
+    input:
+    file(gds_files) from gds_pruned_1.collect()
+
+    output:
+    file '*'
+    file 'merged.gds' into gds_merged_1, gds_merged_2, gds_merged_3
+
+    script:
+    """
+    03_merge_gds.R $gds_files
+    """
+  }  
+  
   process pcair {
     publishDir "${params.outdir}/PCA_GRM/pcair", mode: 'copy'
         
@@ -238,9 +311,10 @@ if (params.pca_grm) {
 }
 
 /*
-** STEP 4 nullmod and gwas/gene-based/longitudinal analysis
+** STEP 4: nullmod and gwas/gene-based/longitudinal analysis
 */
-if ( (params.gwas | params.gene_based) & params.pca_grm) {
+
+if ( (params.gwas | params.gene_based) & params.pca_grm ) {
   process nullmod {
     publishDir "${params.outdir}/Association_Test/nullmod", mode: 'copy'
   
@@ -254,12 +328,12 @@ if ( (params.gwas | params.gene_based) & params.pca_grm) {
 
     script:
     """
-    04_nullmod.R $gds_merged ${params.phenotype} ${params.covars} ${params.model} analysis.sample.id.rds annot.rds pc.df.rds grm.rds
+    04_nullmod.R $gds_merged ${params.phenotype} ${params.covars} ${params.model} pc.df.rds grm.rds
     """
   }
 }
 
-if ( (params.gwas | params.gene_based) & !params.pca_grm) {
+if ( (params.gwas | params.gene_based) & !params.pca_grm ) {
   process nullmod_skip_pca_grm {
     publishDir "${params.outdir}/Association_Test/nullmod", mode: 'copy'
   
@@ -276,7 +350,7 @@ if ( (params.gwas | params.gene_based) & !params.pca_grm) {
   }
 }
 
-if (params.gwas & params.pca_grm) {
+if ( params.gwas ) {
   process gwas {
     tag "$chr"
     publishDir "${params.outdir}/Association_Test/gwas", mode: 'copy'
@@ -291,32 +365,12 @@ if (params.gwas & params.pca_grm) {
 
     script:
     """
-    04_gwas.R ${gds} annot_pc.rds nullmod.rds ${params.test} ${params.imputed} ${chr}.csv ${chr}_gwas.log
+    04_gwas.R ${gds} annot.rds annot_pc.rds nullmod.rds ${params.test} ${params.imputed} ${chr}.csv ${chr}_gwas.log
     """
   }
 }
 
-if (params.gwas & !params.pca_grm) { 
-  process gwas_skip_pca_grm {
-    tag "$chr"
-    publishDir "${params.outdir}/Association_Test/gwas", mode: 'copy'
-    
-    input:
-    set val(chr), file(gds) from gds_files_2
-    file '*' from nullmod.collect()
- 
-    output:
-    set val(chr), file('*.csv') into gwas1
-    file '*' into gwas2
-
-    script:
-    """
-    04_gwas.R ${gds} annot.rds nullmod.rds ${params.test} ${params.imputed} ${chr}.csv ${chr}_gwas.log
-    """
-  }
-}
-
-if (params.gene_based & params.pca_grm) {
+if (params.gene_based ) {
   process gene_based {
     tag "$chr"
     publishDir "${params.outdir}/Association_Test/gene_based", mode: 'copy'
@@ -331,32 +385,12 @@ if (params.gene_based & params.pca_grm) {
   
     script:
     """
-    04_gene_based.R ${gds} annot_pc.rds nullmod.rds ${params.max_maf} ${params.method} ${chr}.csv ${chr}.rds ${chr}_gene_based.log
+    04_gene_based.R ${gds} annot.rds annot_pc.rds nullmod.rds ${params.max_maf} ${params.method} ${chr}.csv ${chr}.rds ${chr}_gene_based.log
     """
   }
 }
 
-if (params.gene_based & !params.pca_grm) {
-  process gene_based_skip_pca_grm {
-    tag "$chr"
-    publishDir "${params.outdir}/Association_Test/gene_based", mode: 'copy'
-    
-    input:
-    set val(chr), file(gds) from gds_files_2
-    file '*' from nullmod.collect()
- 
-    output:
-    file('*.csv') into gene_based
-    file '*'
-
-    script:
-    """
-    04_gene_based.R ${gds} annot.rds nullmod.rds ${params.max_maf} ${params.method} ${chr}.csv ${chr}.rds ${chr}_gene_based.log
-    """
-  }
-}
-
-if (params.longitudinal&params.pca_grm) {
+if ( params.longitudinal & params.pca_grm ) {
   process nullmod_longitudinal {
     publishDir "${params.outdir}/Association_Test/nullmod_longitudinal", mode: 'copy'
   
@@ -374,25 +408,7 @@ if (params.longitudinal&params.pca_grm) {
   }
 }
 
-if (params.longitudinal & !params.pca_grm) {
-  process nullmod_longitudinal_skip_pca_grm {
-    publishDir "${params.outdir}/Association_Test/nullmod_longitudinal", mode: 'copy'
-  
-    input:
-    file(gds_merged) from gds_merged_3
-
-    output:
-    file '*' into nullmod_longitudinal
-    file '*' into nullmod1
-
-    script:
-    """
-    04_nullmod_longitudinal_skip_pca_grm.R $gds_merged ${params.pheno} ${params.phenotype} ${params.covars} ${params.model} ${params.grm} ${params.random_slope}
-    """
-  }
-}
-
-if (params.longitudinal) {
+if ( params.longitudinal ) {
   process gwas_longitudinal {
     tag "$chr"
     publishDir "${params.outdir}/Association_Test/gwla", mode: 'copy'
@@ -412,7 +428,7 @@ if (params.longitudinal) {
 }
 
 /*
-** STEP 5 summary and plot
+** STEP 5: summary and plot
 */
 
 if (params.gene_based) {
@@ -462,7 +478,7 @@ if ( (params.gwas | params.longitudinal) & params.pca_grm) {
 
   script:
   """
-  05_caf_by_group.R ${gds} ${params.pheno} analysis.sample.id.rds ${params.model} ${params.phenotype} ${params.group} ${chr}_caf_by_group.csv ${chr}_caf_by_group.log
+  05_caf_by_group.R ${gds} ${params.pheno} analysis.sample.id.rds ${params.dosage} ${params.model} ${params.phenotype} ${params.group} ${chr}_caf_by_group.csv ${chr}_caf_by_group.log
   """
  }
 }
@@ -482,7 +498,7 @@ if ( (params.gwas | params.longitudinal) & !params.pca_grm) {
 
   script:
   """
-  05_caf_by_group.R ${gds} ${params.pheno} analysis.sample.id.rds ${params.model} ${params.phenotype} ${params.group} ${chr}_caf_by_group.csv ${chr}_caf_by_group.log
+  05_caf_by_group.R ${gds} ${params.pheno} analysis.sample.id.rds ${params.dosage} ${params.model} ${params.phenotype} ${params.group} ${chr}_caf_by_group.csv ${chr}_caf_by_group.log
   """
  }
 }
@@ -527,39 +543,40 @@ if (params.gwas | params.longitudinal) {
 }
 
 if(params.gwas|params.longitudinal){
-process combine_results {
-  publishDir "${params.outdir}/Summary_Plot/combined_results", mode: 'copy'
+  process combine_results {
+    publishDir "${params.outdir}/Summary_Plot/combined_results", mode: 'copy'
   
-  input:
-  file(csv_files) from merge_by_chr.collect()
+    input:
+    file(csv_files) from merge_by_chr.collect()
   
-  output:
-  file '*' into combined_results1
-  file '*' into combined_results2
+    output:
+    file '*' into combined_results1
+    file '*' into combined_results2
 
-  script:
-  """
-  05_combine_results.R ${csv_files}
-  """
-}
+    script:
+    """
+    05_combine_results.R ${csv_files}
+    """
+  }
 
-process plot {
-  publishDir "${params.outdir}/Summary_Plot/qq_manhattan", mode: 'copy'
+  process plot {
+    publishDir "${params.outdir}/Summary_Plot/qq_manhattan", mode: 'copy'
   
-  input:
-  file '*' from combined_results1.collect()
+    input:
+    file '*' from combined_results1.collect()
   
-  output:
-  file '*' into qq_manhattan
+    output:
+    file '*' into qq_manhattan
 
-  script:
-  """
-  05_qqplot_manhattanplot.R all_chr_caf_annotated.csv ${params.min_maf} ${params.max_pval_manhattan}
-  """
+    script:
+    """
+    05_qqplot_manhattanplot.R all_chr_caf_annotated.csv ${params.min_maf} ${params.max_pval_manhattan}
+    """
+  }
 }
 
 /*
-** STEP 6 annotation
+** STEP 6: annotation
 */
 
 process annovar_input {
@@ -618,10 +635,9 @@ process add_annovar {
   06_add_anno_results.R ${params.ref_genome}
   """
 }
-}
 
 /*
-** STEP 7 Report
+** STEP 7: report
 */
 
 if(params.gwas|params.longitudinal){
@@ -659,4 +675,5 @@ if(params.gene_based){
     """
   }
 }
+
 
