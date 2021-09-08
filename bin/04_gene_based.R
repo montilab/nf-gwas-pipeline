@@ -1,13 +1,14 @@
 #!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
 gds.file <- args[1]
-annot <- args[2]
-nullmod <- args[3]
-max_maf <- args[4]
-method <- args[5]
-result.file1 <- args[6]
-result.file2 <- args[7]
-log.file <- args[8]
+annot1 <- args[2]
+annot2 <- args[3]
+nullmod <- args[4]
+max_maf <- args[5]
+method <- args[6]
+result.file1 <- args[7]
+result.file2 <- args[8]
+log.file <- args[9]
 
 sink(log.file, append=FALSE, split=TRUE)
 date()
@@ -23,7 +24,8 @@ suppressPackageStartupMessages(library(TxDb.Hsapiens.UCSC.hg19.knownGene))
 gds <- seqOpen(gds.file)
 
 ####Create a SeqVarData object
-annot <- readRDS(annot)
+annot <- try(readRDS(annot1))
+annot <- try(readRDS(annot2))
 seqData <- SeqVarData(gds, sampleData=annot)
 
 ####Null model
