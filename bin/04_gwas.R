@@ -1,12 +1,13 @@
 #!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
 gds.file <- args[1]
-annot <- args[2]
-nullmod <- args[3]
-test <- args[4]
-imputed <- args[5]
-result.file <- args[6]
-log.file <- args[7]
+annot1 <- args[2]
+annot2 <- args[3]
+nullmod <- args[4]
+test <- args[5]
+imputed <- args[6]
+result.file <- args[7]
+log.file <- args[8]
 
 sink(log.file, append=FALSE, split=TRUE)
 date()
@@ -24,7 +25,8 @@ gds <- seqOpen(gds.file)
 snps <- data.frame(variant.id=seqGetData(gds, "variant.id"), snpID=seqGetData(gds, "annotation/id"))
 
 ####Create a SeqVarData object
-annot <- readRDS(annot)
+annot <- try(readRDS(annot1))
+annot <- try(readRDS(annot2))
 seqData <- SeqVarData(gds, sampleData=annot)
 
 ####Null model
