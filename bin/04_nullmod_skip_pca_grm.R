@@ -1,11 +1,12 @@
 #!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
-gds.file <- args[1]
-pheno.file <- args[2]
-phenotypes <- args[3]
-covariates <- unlist(strsplit(args[4], ","))
-model <- args[5]
-grm <- args[6]
+n <- length(args)
+gds.file <- args[n-5]
+pheno.file <- args[n-4]
+phenotypes <- args[n-3]
+covariates <- unlist(strsplit(args[n-2], ","))
+model <- args[n-1]
+grm <- args[n]
 
 sink("nullmod.log", append=FALSE, split=TRUE)
 date()
