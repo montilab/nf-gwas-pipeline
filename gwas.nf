@@ -144,6 +144,11 @@ if( params.gds_input ){
     .map {row -> tuple(row[0], file(row[1]))}
     .ifEmpty {error "File ${params.gds_list} not parsed properly"}
     .set {gds_files_3}
+  Channel
+    .fromPath(params.gds_list).splitCsv(header: false)
+    .map {row -> tuple(row[0], file(row[1]))}
+    .ifEmpty {error "File ${params.gds_list} not parsed properly"}
+    .set {gds_files_4}
 }
 
 /*
@@ -231,7 +236,7 @@ if( !params.qc & !params.gds_input ){
 
     output:
     file '*'
-    set val(chr), file('*.gds') into gds_files_1, gds_files_2, gds_files_3
+    set val(chr), file('*.gds') into gds_files_1, gds_files_2, gds_files_3, gds_files_4
 
     script:
     """
@@ -338,14 +343,14 @@ if ( (params.gwas | params.gene_based) & !params.pca_grm ) {
     publishDir "${params.outdir}/Association_Test/nullmod", mode: 'copy'
   
     input:
-    file(gds_merged) from gds_merged_3
+    file(gds_files) from gds_files_4.collect()
 
     output:
     file '*' into nullmod, nullmod1
 
     script:
     """
-    04_nullmod_skip_pca_grm.R $gds_merged ${params.pheno} ${params.phenotype} ${params.covars} ${params.model} ${params.grm}
+    04_nullmod_skip_pca_grm.R $gds_files ${params.pheno} ${params.phenotype} ${params.covars} ${params.model} ${params.grm}
     """
   }
 }
@@ -404,6 +409,24 @@ if ( params.longitudinal & params.pca_grm ) {
     script:
     """
     04_nullmod_longitudinal.R ${params.pheno} ${params.phenotype} ${params.covars} ${params.model} analysis.sample.id.rds pc.df.rds grm.rds ${params.random_slope}
+    """
+  }
+}
+
+if (params.longitudinal & !params.pca_grm) {
+  process nullmod_longitudinal_skip_pca_grm {
+    publishDir "${params.outdir}/Association_Test/nullmod_longitudinal", mode: 'copy'
+  
+    input:
+    file(gds_files) from gds_files_4.collect()
+
+    output:
+    file '*' into nullmod_longitudinal
+    file '*' into nullmod1
+
+    script:
+    """
+    04_nullmod_longitudinal_skip_pca_grm.R $gds_files ${params.pheno} ${params.phenotype} ${params.covars} ${params.model} ${params.grm} ${params.random_slope}
     """
   }
 }
