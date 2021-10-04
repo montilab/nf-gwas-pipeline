@@ -12,19 +12,12 @@ suppressPackageStartupMessages(library(data.table))
 
 ####input data
 dat <- fread(summary.file,header = T,stringsAsFactors = F)
-dat <- as.tbl(dat)
 dat <- dat %>%
   rename(pval = contains("pval"))
-dat <- dat[which(!is.na(dat$pval)),]
-
-colnames(dat)[colnames(dat)=="Est"] <- "beta"
-colnames(dat)[colnames(dat)=="Score"] <- "beta"
-colnames(dat)[colnames(dat)=="Est.SE"] <- "se"
-colnames(dat)[colnames(dat)=="Score.SE"] <- "se"
-colnames(dat)[colnames(dat)=="AF"] <- "freq"
+dat <- dat[which(!is.na(dat$pval) & dat$pval!=0),]
 
 ####qqplot
-lambda_GC <- median((dat$beta/dat$se)^2)/qchisq(0.5,1)
+lambda_GC <- median(qchisq(1-dat$pval,1))/qchisq(0.5,1)
 index <- 1:dim(dat)[1]/(dim(dat)[1]+1)
 
 cat("\n####qq-plot starts\n")
