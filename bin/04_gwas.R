@@ -25,8 +25,8 @@ gds <- seqOpen(gds.file)
 snps <- data.frame(variant.id=seqGetData(gds, "variant.id"), snpID=seqGetData(gds, "annotation/id"))
 
 ####Create a SeqVarData object
-annot <- try(readRDS(annot1))
-annot <- try(readRDS(annot2))
+try(annot <- readRDS(annot1))
+try(annot <- readRDS(annot2))
 seqData <- SeqVarData(gds, sampleData=annot)
 
 ####Null model
