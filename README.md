@@ -234,6 +234,7 @@ kable(head(snp.dat))
 1.  A symmetric matrix saved in rds format with both columns being
     subjects
 2.  Can be replaced by 2\*kinship matrix
+3.  GRM should always be a subset of phenotype and genotype files.
 
 <!-- end list -->
 
