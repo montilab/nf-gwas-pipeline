@@ -80,8 +80,8 @@ cat("####snpgdsIBDKING ends\n\n")
 
 ####PC-AiR
 cat("\n####pcair starts\n")
-pcs <- pcair(seqData, kinobj=kingMat, kin.thresh=2^(-7/2),
-                      divobj=kingMat, div.thresh=-2^(-7/2),
+pcs <- pcair(seqData, kinobj=kingMat, kin.thresh=2^(-11/2),
+                      divobj=kingMat, div.thresh=-2^(-11/2),
              sample.include=analysis.sample.id,
              snp.include=pruned,
              verbose=T)
