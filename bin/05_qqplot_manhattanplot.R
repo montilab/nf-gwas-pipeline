@@ -15,6 +15,7 @@ dat <- fread(summary.file,header = T,stringsAsFactors = F)
 dat <- dat %>%
   rename(pval = contains("pval"))
 dat <- dat[which(!is.na(dat$pval) & dat$pval!=0),]
+print(paste0("variants with valid results : ", dim(dat)[1]))
 
 ####qqplot
 lambda_GC <- median(qchisq(1-dat$pval,1))/qchisq(0.5,1)
@@ -86,7 +87,7 @@ dat <- dat[dat$freq > MAF & dat$freq < 1-MAF,]
 print(paste0("variants with MAF > ", MAF, " : ", dim(dat)[1]))
 
 ####qqplot (filter out MAF)
-lambda_GC <- median((dat$beta/dat$se)^2)/qchisq(0.5,1)
+lambda_GC <- median(qchisq(1-dat$pval,1))/qchisq(0.5,1)
 index <- 1:dim(dat)[1]/(dim(dat)[1]+1)
 
 cat("\n####qq-plot for MAF starts\n")
