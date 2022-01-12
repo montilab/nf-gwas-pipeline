@@ -6,7 +6,7 @@ date()
 suppressPackageStartupMessages(library(SeqArray))
 
 cat("\n####seqMerge starts\n")
-seqMerge(args, "merged.gds")
+seqMerge(sort(args), "merged.gds")
 cat("####seqMerge ends\n\n")
 
 date()

@@ -16,7 +16,7 @@ annovar$pos <- annovar$Start
 annot.results <- left_join(results, annovar, by = c("chr", "pos") )
 
 annot.results <- annot.results %>%
-	select ("snpID", "chr", "pos", "REF", "ALT", contains("Imputation_Rsq"), contains("Imputation_mark"), contains("Score"), contains("Wald"), "pval", "N", contains("n.case"), contains("n.control"), contains("caf"), contains("dosage"), contains("refGene"))
+	select ("snpID", "chr", "pos", "REF", "ALT", contains("Imputation_Rsq"), contains("Imputation_mark"), contains("Score"), contains("EST"), "pval", contains("SPA"), "PVE", "N", contains("n.case"), contains("n.control"), MAC, contains("caf"), contains("dosage"), contains("refGene"))
 
 fwrite(annot.results[order(annot.results$pval),], "top_snps_annotation.csv", row.names = FALSE)
 

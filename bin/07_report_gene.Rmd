@@ -16,27 +16,7 @@ suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library(EBImage))
 ```
 
-##QC
-The number of SNPs included in the gds file for each chromosome and total:
-```{r include=FALSE}
-snp.n.gds <- c()
-chr <- c()
-for(i in 1:22){
-  try(gds <- seqOpen(paste0(outdir,"/GDS/gds_files/chr_",i,".gds")))
-  try(snp.n.gds <- c(snp.n.gds, length(seqGetData(gds, "variant.id"))))
-  try(chr <- c(chr, paste0("chr",seqGetData(gds, "chromosome")[1])))
-  try(seqClose(gds))
-}
-snp.n.gds <- c(snp.n.gds, sum(snp.n.gds))
-chr <- c(chr, "Total")
-dat.gds <- data.frame(count=snp.n.gds)
-rownames(dat.gds) <- chr
-```
-```{r}
-kable(t(dat.gds))
-```
-
-##PCA plot
+## PCA plot
 ```{r include=FALSE}
 try(pc1 <- readImage(paste0(outdir, "/PCA_GRM/pcair/PC1vsPC2.png")))
 try(pc2 <- readImage(paste0(outdir, "/PCA_GRM/pcair/PC3vsPC4.png")))
@@ -47,7 +27,7 @@ try(display(pc1))
 try(display(pc2))
 ```
 
-##Kinship plot
+## Kinship plot
 ```{r include=FALSE}
 try(kinship <- readImage(paste0(outdir, "/PCA_GRM/pcrelate/kinship.png")))
 ```
@@ -55,7 +35,7 @@ try(kinship <- readImage(paste0(outdir, "/PCA_GRM/pcrelate/kinship.png")))
 try(display(kinship))
 ```
 
-##QQ plot
+## QQ plot
 ```{r include=FALSE}
 try(qq <- readImage(paste0(outdir, "/Summary_Plot/qq_plot/qqplot.png")))
 ```
@@ -63,7 +43,7 @@ try(qq <- readImage(paste0(outdir, "/Summary_Plot/qq_plot/qqplot.png")))
 try(display(qq))
 ```
 
-##Annotated top results
+## Annotated top results
 ```{r include=FALSE}
 annotated.results <- fread(paste0(outdir, "/Summary_Plot/combined_results/all_chr.csv"), header=T, stringsAsFactors=F)
 ```
