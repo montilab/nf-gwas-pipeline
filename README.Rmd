@@ -109,14 +109,15 @@ Succeeded   : 141
 
 ### Alternative to Docker
 
-If you are running the pipeline on a HPC that does not support docker (BU's Shared Computing Cluster), you can load the dependencies and run the pipeline as follows.
+If you are running the pipeline on a HPC that does not support docker (BU's Shared Computing Cluster), you can load the dependencies and run the pipeline as follows. (In addition, you need to install following R packages: SeqArray, GENESIS, Biobase, SeqVarTools, dplyr, SNPRelate, ggplot2, data.table, reshape2, latex2exp, knitr, EBImage, GenomicRanges, TxDb.Hsapiens.UCSC.hg19.knownGene, GMMAT, ezknitr)
 
 ```
-$ module load R/3.6.0
-$ module load vcftools
-$ module load bcftools
+$ module load R/4.1.1
+$ module load vcftools/0.1.16
+$ module load bcftools/1.10.2
 $ module load plink/2.00a1LM
 $ module load annovar/2018apr
+$ module load pandoc/2.5
 
 nextflow gwas.nf -c gwas.config
 ```
@@ -295,3 +296,43 @@ run with equivalent command:
 nextflow run gwas.nf --vcf_list $PWD/data/1KG_vcf.csv --pheno $PWD/data/1KG_pheno_longitudinal.csv --phenotype outcome --covars sex,age,PC1,PC2,PC3,PC4 --pca_grm --model linear --test Score --longitudinal --random_slope delta.age --group Population --min_maf 0.1 --max_pval_manhattan 0.5 --max_pval 0.01 --ref_genome hg19
 
 ```
+
+# Help command
+```bash
+you can see explanations for all parameters with the help command:
+nextflow gwas.nf --help
+
+N E X T F L O W  ~  version 19.04.1
+Launching `gwas.nf` [tiny_venter] - revision: c9ded642f7
+USAGE:
+Mandatory arguments:
+--vcf_list                 String        Path to the two-column mapping csv file: id , file_path 
+--pheno                    String        Path to the phenotype file
+--phenotype                String        Name of the phenotype column
+Optional arguments:
+--gds_input                Logical       If true, ignore vcf input, start with GDS files and skip qc_miss, qc_mono, vcf_to_gds steps
+--gds_list                 String        Path to the two-column mapping gds file: id , file_path 
+--outdir                   String        Path to the master folder to store all results
+--covars                   String        Name of the covariates to include in analysis model separated by comma (e.g. "age,sex,educ")
+--qc                       Logical       If true, run qc_miss(filter genotypes called below max_missing) and qc_mono (drop monomorphic SNPs)
+--max_missing              Numeric       Threshold for qc_miss (filter genotypes called below this value)
+--pca_grm                  Logical       If true, run PCAiR (generate PCA in Related individuals) and PCRelate (generate genomic relationship matrix)
+--snpset                   String        Path to the two column txt file separated by comma: chr,pos (can only be effective when pca_grm = true)
+--grm                      String        Path to the genomic relationship matrix (can only be effective when pca_grm = false)
+--model                    String        Name of regression model for gwas: "linear" or "logistic"
+--test                     String        Name of statistical test for significance: "Score", "Score.SPA", "BinomiRare" and "CMP" (details see https://rdrr.io/bioc/GENESIS/man/assocTestSingle.html) 
+--gwas                     Logical       If true, run gwas
+--imputed                  Logical       If true, use dosages in regression model (DS columns needed in input vcf files)
+--gene_based               Logical       If true, run aggregate test for genes based on hg19 reference genome
+--max_maf                  Numeric       Threshold for maximun minor allele frequencies of SNPs to be aggregated
+--method                   String        Name of aggregation test method: "Burden", "SKAT", "fastSKAT", "SMMAT" or "SKATO"
+--longitudinal             Logical       If true, run genome-wide longitudianl analysis
+--random_slope             String        if set to "null", random intercept only model is run; else run random slope and random intercept model
+--group                    String        Name of the group variable based on which the allele frequencies in each subgroup is calculated (can be left empty)
+--dosage                   Logical       If true, also calculate dosages in addition to allele frequencies (can be very slow with large single gds input)
+--min_maf                  Numeric       Threshold for minimun minor allele frequencies of SNPs to include in QQ- and Manhattan-plot
+--max_pval_manhattan       Numeric       Threshold for maximun p-value of SNPs to show in Manhattan-plot 
+--max_pval                 Numeric       Threshold for maxumun p-value of SNPs to annotate
+--ref_genome               String        Name of the reference genome for annotation: hg19 or hg38
+```
+
