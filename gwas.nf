@@ -678,7 +678,7 @@ if(params.gwas|params.longitudinal){
     script:
     """
     mkdir -p ${params.outdir}/Report
-    Rscript -e 'ezknitr::ezknit(file = "$PWD/07_report.Rmd", out_dir = "${params.outdir}/Report")' ${params.outdir}
+    Rscript -e 'ezknitr::ezknit(file = "$PWD/bin/07_report.Rmd", out_dir = "${params.outdir}/Report")' ${params.outdir}
     """
   }
 }
@@ -695,7 +695,7 @@ if(params.gene_based){
     script:
     """
     mkdir -p ${params.outdir}/Report
-    Rscript -e 'ezknitr::ezknit(file = "$PWD/07_report_gene.Rmd", out_dir = "${params.outdir}/Report")' ${params.outdir} ${params.max_pval}
+    Rscript -e 'ezknitr::ezknit(file = "$PWD/bin/07_report_gene.Rmd", out_dir = "${params.outdir}/Report")' ${params.outdir} ${params.max_pval}
     """
   }
 }
