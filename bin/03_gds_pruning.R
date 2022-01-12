@@ -48,6 +48,7 @@ snp.dat$chr_pos <- paste0(snp.dat$chr, ":", snp.dat$pos)
 if(snpset.file=="null"){
   snpset <- snpgdsLDpruning(gds, sample.id=analysis.sample.id, method="corr", slide.max.bp=10e7, ld.threshold=sqrt(0.1))
   pruned <- unlist(snpset, use.names=FALSE)
+  seqResetFilter(gds)
   seqSetFilter(gds, variant.id = pruned)
   seqExport(gds, pruned.gds.file)
 }else{
@@ -55,6 +56,7 @@ if(snpset.file=="null"){
   snpset.dat$chr_pos <- paste0(snpset.dat$chr, ":", snpset.dat$pos)
   snp.intersect.dat <- snp.dat[snp.dat$chr_pos%in% snpset.dat$chr_pos,]
   pruned <- unlist(snp.intersect.dat$variant.id)
+  seqResetFilter(gds)
   seqSetFilter(gds, variant.id = pruned)
   seqExport(gds, pruned.gds.file)
 }
