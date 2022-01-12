@@ -76,7 +76,7 @@ Optional arguments:
 --snpset                   String        Path to the two column txt file separated by comma: chr,pos (can only be effective when pca_grm = true)
 --grm                      String        Path to the genomic relationship matrix (can only be effective when pca_grm = false)
 --model                    String        Name of regression model for gwas: "linear" or "logistic"
---test                     String        Name of statistical test for significance: "Wald" or "Score" ("Wald" test is only effective for linear regression in GWAS)
+--test                     String        Name of statistical test for significance: "Score", "Score.SPA", "BinomiRare" and "CMP" (details see https://rdrr.io/bioc/GENESIS/man/assocTestSingle.html) 
 --gwas                     Logical       If true, run gwas
 --imputed                  Logical       If true, use dosages in regression model (DS columns needed in input vcf files)
 --gene_based               Logical       If true, run aggregate test for genes based on hg19 reference genome
