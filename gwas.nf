@@ -183,7 +183,7 @@ if( !params.gds_input & params.qc ){
 
     script:
     """
-    vcftools --gzvcf $vcf --max-missing 0.99 --recode --stdout | gzip -c > ${chr}_qc1.vcf.gz
+    vcftools --gzvcf $vcf --max-missing ${params.max_missing} --recode --stdout | gzip -c > ${chr}_qc1.vcf.gz
     """
   }
 
@@ -217,7 +217,7 @@ if( params.qc ){
 
     output:
     file '*'
-    set val(chr), file('*.gds') into gds_files_1, gds_files_2, gds_files_3
+    set val(chr), file('*.gds') into gds_files_1, gds_files_2, gds_files_3, gds_files_4
 
     script:
     """
@@ -601,13 +601,25 @@ if(params.gwas|params.longitudinal){
 /*
 ** STEP 6: annotation
 */
+process annovar_ref {  
+  publishDir "${params.outdir}/Annotation/humandb", mode: 'copy'
+
+  output:
+  file '*' into annovar_ref
+  
+  script:
+  """
+  annotate_variation.pl --downdb --buildver ${params.ref_genome} --webfrom annovar refGene .
+  """
+}
 
 process annovar_input {
   publishDir "${params.outdir}/Annotation/annovar_input", mode: 'copy'
     
   input:
   file '*' from combined_results2.collect()
-  
+  file '*' from annovar_ref.collect()
+
   output:
   file '*' into annovar_input1
   file '*' into annovar_input2
@@ -615,16 +627,6 @@ process annovar_input {
   script:
   """
   06_annovar_input.R ${params.max_pval}
-  """
-}
-
-process annovar_ref {  
-  publishDir "${params.outdir}/Annotation/", mode: 'copy'
-  
-  script:
-  """
-  mkdir -p ${params.outdir}/Annotation
-  annotate_variation.pl --downdb --buildver ${params.ref_genome} --webfrom annovar refGene ${params.outdir}/Annotation/humandb
   """
 }
 
@@ -668,6 +670,7 @@ if(params.gwas|params.longitudinal){
     publishDir "${params.outdir}/Report", mode: 'copy'
   
     input:
+    file '*' from qq_manhattan.collect()
     file '*' from report.collect()
   
     output:
@@ -675,8 +678,7 @@ if(params.gwas|params.longitudinal){
     script:
     """
     mkdir -p ${params.outdir}/Report
-    Rscript -e 'rmarkdown::render("$PWD/bin/07_report.Rmd")' ${params.outdir}
-    mv $PWD/bin/07_report.html ${params.outdir}/Report/Report.html
+    Rscript -e 'ezknitr::ezknit(file = "$PWD/07_report.Rmd", out_dir = "${params.outdir}/Report")' ${params.outdir}
     """
   }
 }
@@ -693,10 +695,8 @@ if(params.gene_based){
     script:
     """
     mkdir -p ${params.outdir}/Report
-    Rscript -e 'rmarkdown::render("$PWD/bin/07_report_gene.Rmd")' ${params.outdir} ${params.max_pval}
-    mv $PWD/bin/07_report_gene.html ${params.outdir}/Report/Report.html
+    Rscript -e 'ezknitr::ezknit(file = "$PWD/07_report_gene.Rmd", out_dir = "${params.outdir}/Report")' ${params.outdir} ${params.max_pval}
     """
   }
 }
-
 
