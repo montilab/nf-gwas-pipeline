@@ -16,7 +16,7 @@ snps <- snps %>%
 snps <- snps %>% filter(!is.na(pval))
 print(paste0("number of variants analyzed : ",dim(snps)[1]))
 
-snps <- snps %>% filter(pval < max_pval)
+snps <- snps %>% filter(pval < max_pval & pval != 0)
 print(paste0("number of variants with p-value < ", max_pval," : ",dim(snps)[1]))
 
 fwrite(snps, "top_snps_caf_annotated.csv", row.names = F)
