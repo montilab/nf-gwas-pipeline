@@ -90,9 +90,8 @@ if (model == "logistic") {
 
 
 seqSetFilter(gds, sample.id = analysis.sample.id)
-genotype.dat <- seqGetData(gds, "genotype")
-genotype <- genotype.dat[1,,]+genotype.dat[2,,]
-caf <- apply(genotype,2,sum)/dim(genotype)[1]/2
+caf <- snpgdsSNPRateFreq(gds, sample.id = analysis.sample.id)
+caf <- 1-caf$AlleleFreq
 if(dose=="true"){
   try(dosage.dat <- seqGetData(gds, "annotation/format/DS")$data)
   try(dosage <- apply(dosage.dat,2,sum)/dim(dosage.dat)[1]/2)
