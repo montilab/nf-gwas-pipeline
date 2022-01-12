@@ -65,6 +65,16 @@ if __name__ == '__main__':
     subprocess.call(['mv', '{0}/configs/temp.config'.format(path),
                            '{0}/configs/gwla_1KG_linear_slope.config'.format(path)])
 
+    print('Initializing nf...')
+    with open('{0}/temp.nf'.format(path), 'w') as outfile:
+        with open('{0}/gwas.nf'.format(path), 'r') as infile:
+            for line in infile:
+                    outfile.write(line.replace("$PWD", "{0}".format(path)))
+
+    subprocess.call(['rm', '-rf', '{0}/gwas.nf'.format(path)])
+    subprocess.call(['mv', '{0}/temp.nf'.format(path),
+                           '{0}/gwas.nf'.format(path)])
+
     print('Initializing test data...')
     with open('{0}/data/toy_vcf.csv'.format(path), 'w') as outfile:
         for i in range(1, 23):
