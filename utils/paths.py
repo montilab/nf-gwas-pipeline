@@ -83,6 +83,10 @@ if __name__ == '__main__':
     with open('{0}/data/1KG_vcf.csv'.format(path), 'w') as outfile:
         for i in range(1, 23):
             outfile.write("chr_{0},{1}/data/1KG_vcf/1KG_phase3_subset_chr{0}.vcf.gz\n".format(i, path))
+    
+    with open('{0}/data/toy_gds.csv'.format(path), 'w') as outfile:
+        for i in range(1, 23):
+            outfile.write("chr_{0},{1}/data/gds/chr_{0}.gds\n".format(i, path))
 
     print('Success!')
     print('Pipeline Directory : {0}'.format(path))
