@@ -4,11 +4,12 @@ gds.file <- args[1]
 annot1 <- args[2]
 annot2 <- args[3]
 nullmod <- args[4]
-max_maf <- args[5]
-method <- args[6]
-result.file1 <- args[7]
-result.file2 <- args[8]
-log.file <- args[9]
+max.miss <- as.numeric(args[5])
+max_maf <- args[6]
+method <- args[7]
+result.file1 <- args[8]
+result.file2 <- args[9]
+log.file <- args[10]
 
 sink(log.file, append=FALSE, split=TRUE)
 date()
@@ -30,6 +31,14 @@ seqData <- SeqVarData(gds, sampleData=annot)
 
 ####Null model
 nullmod <- readRDS(nullmod)
+
+####Calculate Missing Rate of SNPs and clean genotype data
+snps <- data.frame(variant.id=seqGetData(gds, "variant.id"), snpID=seqGetData(gds, "annotation/id"))
+seqSetFilter(seqData, sample.id=nullmod$fit$sample.id)
+snps$missing.rate <- seqMissing(seqData)
+
+snps.clean <- snps[snps$missing.rate < (1-max.miss), ]
+seqSetFilter(seqData, variant.id=snps.clean$variant.id)
 
 ####Aggregate test
 gr <- granges(gds)
