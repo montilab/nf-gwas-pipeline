@@ -76,7 +76,7 @@ Optional arguments:
 --snpset                   String        Path to the two column txt file separated by comma: chr,pos (can only be effective when pca_grm = true)
 --grm                      String        Path to the genomic relationship matrix (can only be effective when pca_grm = false)
 --model                    String        Name of regression model for gwas: "linear" or "logistic"
---test                     String        Name of statistical test for significance: "Score", "Score.SPA", "BinomiRare" and "CMP" (details see https://rdrr.io/bioc/GENESIS/man/assocTestSingle.html) 
+--test                     String        Name of statistical test for significance: "Wald" or "Score" ("Wald" test is only effective for linear regression in GWAS)
 --gwas                     Logical       If true, run gwas
 --imputed                  Logical       If true, use dosages in regression model (DS columns needed in input vcf files)
 --gene_based               Logical       If true, run aggregate test for genes based on hg19 reference genome
@@ -370,7 +370,7 @@ if ( params.gwas ) {
 
     script:
     """
-    04_gwas.R ${gds} annot.rds annot_pc.rds nullmod.rds ${params.test} ${params.imputed} ${chr}.csv ${chr}_gwas.log
+    04_gwas.R ${gds} annot.rds annot_pc.rds nullmod.rds ${params.max_missing} ${params.test} ${params.imputed} ${chr}.csv ${chr}_gwas.log
     """
   }
 }
@@ -390,7 +390,7 @@ if (params.gene_based ) {
   
     script:
     """
-    04_gene_based.R ${gds} annot.rds annot_pc.rds nullmod.rds ${params.max_maf} ${params.method} ${chr}.csv ${chr}.rds ${chr}_gene_based.log
+    04_gene_based.R ${gds} annot.rds annot_pc.rds nullmod.rds ${params.max_missing} ${params.max_maf} ${params.method} ${chr}.csv ${chr}.rds ${chr}_gene_based.log
     """
   }
 }
@@ -445,7 +445,7 @@ if ( params.longitudinal ) {
    
     script:
     """
-    04_gwas_longitudinal.R ${gds} nullmod_longitudinal.rds ${chr}.txt ${chr}_gwas_longitudinal.log
+    04_gwas_longitudinal.R ${gds} nullmod_longitudinal.rds ${params.max_missing} ${chr}.txt ${chr}_gwas_longitudinal.log
     """
   }
 }
@@ -601,65 +601,68 @@ if(params.gwas|params.longitudinal){
 /*
 ** STEP 6: annotation
 */
-process annovar_ref {  
-  publishDir "${params.outdir}/Annotation/humandb", mode: 'copy'
+if(params.gwas|params.longitudinal){
+  process annovar_ref {  
+    publishDir "${params.outdir}/Annotation/humandb", mode: 'copy'
 
-  output:
-  file '*' into annovar_ref
+    output:
+    file '*' into annovar_ref
   
-  script:
-  """
-  annotate_variation.pl --downdb --buildver ${params.ref_genome} --webfrom annovar refGene .
-  """
-}
+    script:
+    """
+    annotate_variation.pl --downdb --buildver ${params.ref_genome} --webfrom annovar refGene .
+    """
+  }
 
-process annovar_input {
-  publishDir "${params.outdir}/Annotation/annovar_input", mode: 'copy'
+  process annovar_input {
+    publishDir "${params.outdir}/Annotation/annovar_input", mode: 'copy'
     
-  input:
-  file '*' from combined_results2.collect()
-  file '*' from annovar_ref.collect()
+    input:
+    file '*' from combined_results2.collect()
+    file '*' from annovar_ref.collect()
 
-  output:
-  file '*' into annovar_input1
-  file '*' into annovar_input2
+    output:
+    file '*' into annovar_input1
+    file '*' into annovar_input2
 
-  script:
-  """
-  06_annovar_input.R ${params.max_pval}
-  """
-}
+    script:
+    """
+    06_annovar_input.R ${params.max_pval}
+    """
+  }
 
-process annovar {
-  publishDir "${params.outdir}/Annotation/annovar", mode: 'copy'
+  process annovar {
+    publishDir "${params.outdir}/Annotation/annovar", mode: 'copy'
     
-  input:
-  file '*' from annovar_input1.collect()
+    input:
+    file '*' from annovar_input1.collect()
 
-  output:
-  file '*' into annovar
+    output:
+    file '*' into annovar
 
-  script:
-  """
-  table_annovar.pl -build ${params.ref_genome} top_snps_input.txt ${params.outdir}/Annotation/humandb/ -out top_annotation -remove -protocol refGene -operation g -nastring . -csvout
-  """
-}
+    script:
+    """
+    table_annovar.pl -build ${params.ref_genome} top_snps_input.txt ${params.outdir}/Annotation/humandb/ -out top_annotation -remove -protocol refGene -operation g -nastring . -csvout
+    """
+  }
 
-process add_annovar {
-  publishDir "${params.outdir}/Annotation/annotated_results", mode: 'copy'
+  process add_annovar {
+    publishDir "${params.outdir}/Annotation/annotated_results", mode: 'copy'
   
-  input:
-  file '*' from annovar_input2.collect()
-  file '*' from annovar.collect()
+    input:
+    file '*' from annovar_input2.collect()
+    file '*' from annovar.collect()
 
-  output:
-  file '*' into report
+    output:
+    file '*' into report
 
-  script:
-  """
-  06_add_anno_results.R ${params.ref_genome}
-  """
+    script:
+    """
+    06_add_anno_results.R ${params.ref_genome}
+    """
+  }
 }
+
 
 /*
 ** STEP 7: report
