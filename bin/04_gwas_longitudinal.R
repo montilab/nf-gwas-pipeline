@@ -2,8 +2,9 @@
 args = commandArgs(trailingOnly=TRUE)
 gds.file <- args[1]
 nullmod <- args[2]
-result.file <- args[3]
-log.file <- args[4]
+max.miss <- as.numeric(args[3])
+result.file <- args[4]
+log.file <- args[5]
 
 sink(log.file, append=FALSE, split=TRUE)
 date()
