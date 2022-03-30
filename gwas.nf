@@ -50,7 +50,7 @@ println()
 OUTPUT DIRECTORY
 */
 
-params.outdir = "/rprojectnb2/necs/Zeyuan_Analysis/GWASpipeline/test_upgrade_version/nf-gwas-pipeline/Analysis_Results-${date}"
+params.outdir = "$PWD/Analysis_Results-${date}"
 
 /*
 HELP MESSAGE
