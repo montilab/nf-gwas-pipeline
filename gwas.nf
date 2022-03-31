@@ -15,7 +15,7 @@ params.phenotype   = null
 params.covars      = null
 
 params.qc          = true
-params.max_missing = 0.99
+params.max_missing = 0
 
 params.pca_grm     = false
 params.snpset      = null
