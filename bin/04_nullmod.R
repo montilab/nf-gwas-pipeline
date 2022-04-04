@@ -39,6 +39,7 @@ if(model=="logistic"){
 }
 
 cat("\n####fitNullModel starts\n")
+seqSetFilter(seqData, sample.id = colnames(grm))
 nullmod <- fitNullModel(seqData, outcome=phenotypes, 
                         covars=covariates,
                         cov.mat=grm,
