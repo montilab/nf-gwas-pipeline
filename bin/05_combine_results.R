@@ -1,14 +1,17 @@
 #!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
+mac = as.numeric(args[1])
 
 sink('combine_results.log', append=FALSE, split=TRUE)
 date()
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(data.table))
 
-result <- fread(args[1], stringsAsFactors=F, header=T)
-try(for (i in 2:length(args)) {
+result <- fread(args[2], stringsAsFactors=F, header=T)
+try(result <- result %>% filter(MAC > mac))
+try(for (i in 3:length(args)) {
       res <- fread(args[i], stringsAsFactors=F, header=T)
+      try(res <- res %>% filter(MAC > mac))
       result <- rbind(result, res)
     })
 
