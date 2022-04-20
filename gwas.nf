@@ -38,6 +38,7 @@ params.group               = null
 params.dosage              = false
 params.min_maf             = 0.1
 params.max_pval_manhattan  = 0.5
+params.mac                 = 0
 
 params.max_pval    = 0.01
 params.ref_genome  = "hg19"
@@ -88,6 +89,7 @@ Optional arguments:
 --dosage                   Logical       If true, also calculate dosages in addition to allele frequencies (can be very slow with large single gds input)
 --min_maf                  Numeric       Threshold for minimun minor allele frequencies of SNPs to include in QQ- and Manhattan-plot
 --max_pval_manhattan       Numeric       Threshold for maximun p-value of SNPs to show in Manhattan-plot 
+--mac                      Numeric       Threshold for SNPs with minor allele count above to be kept
 --max_pval                 Numeric       Threshold for maxumun p-value of SNPs to annotate
 --ref_genome               String        Name of the reference genome for annotation: hg19 or hg38
 
@@ -578,7 +580,7 @@ if(params.gwas|params.longitudinal){
 
     script:
     """
-    05_combine_results.R ${csv_files}
+    05_combine_results.R ${params.mac} ${csv_files}
     """
   }
 
