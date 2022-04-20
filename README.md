@@ -433,6 +433,7 @@ Optional arguments:
 --dosage                   Logical       If true, also calculate dosages in addition to allele frequencies (can be very slow with large single gds input)
 --min_maf                  Numeric       Threshold for minimun minor allele frequencies of SNPs to include in QQ- and Manhattan-plot
 --max_pval_manhattan       Numeric       Threshold for maximun p-value of SNPs to show in Manhattan-plot 
+--mac                      Numeric       Threshold for SNPs with minor allele count above to be kept
 --max_pval                 Numeric       Threshold for maxumun p-value of SNPs to annotate
 --ref_genome               String        Name of the reference genome for annotation: hg19 or hg38
 ```
