@@ -83,7 +83,7 @@ dev.off()
 cat("####manhattan-plot ends\n\n")
 
 ####filter out MAF
-dat <- dat[dat$freq > MAF & dat$freq < 1-MAF,]
+dat <- dat[dat$caf > MAF & dat$caf < 1-MAF,]
 print(paste0("variants with MAF > ", MAF, " : ", dim(dat)[1]))
 
 ####qqplot (filter out MAF)
