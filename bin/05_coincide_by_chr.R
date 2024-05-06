@@ -18,6 +18,8 @@ colnames(result.dat)[colnames(result.dat)=="REF"] <- "ref"
 colnames(result.dat)[colnames(result.dat)=="ALT"] <- "alt"
 colnames(result.dat)[colnames(result.dat)=="SCORE"] <- "Score"
 colnames(result.dat)[colnames(result.dat)=="PVAL"] <- "Score.pval"
+colnames(result.dat)[colnames(result.dat)=="VAL"] <- "PVE"
+colnames(result.dat)[colnames(result.dat)=="AF"] <- "freq"
 
 result.dat$Score.pval <- as.numeric(result.dat$Score.pval)
 result.dat$Score.SE <- sqrt(result.dat$VAR)
