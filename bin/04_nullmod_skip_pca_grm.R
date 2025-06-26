@@ -61,6 +61,7 @@ if(grm=="null"){
 	cat("####fitNullModel ends\n\n")
 }else{
 	grm <- readRDS(grm)
+	seqSetFilter(seqData, sample.id = colnames(grm))
 	cat("\n####fitNullModel with grm starts\n")
 	nullmod <- fitNullModel(seqData, outcome=phenotypes, 
     	                    covars=covariates,
