@@ -34,7 +34,7 @@ cat("####qq-plot ends\n\n")
 ####manhattan plot
 cat("\n####manhattan-plot starts\n")
 png("manhattan_plot.png",width=1200,height=400)
-manhattan(dat, chr="chr", bp="pos", snp="variant.id", p="pval" )
+manhattan(dat %>% filter(pval < max_pval), chr="chr", bp="pos", snp="variant.id", p="pval" )
 dev.off()
 cat("####manhattan-plot ends\n\n")
 
@@ -58,7 +58,7 @@ cat("####qq-plot for MAF ends\n\n")
 ####manhattan plot (filter out MAF)
 cat("\n####manhattan-plot for MAF starts\n")
 png(paste0("manhattan_plot_MAF_",MAF,".png"),width=1200,height=400)
-manhattan(dat, chr="chr", bp="pos", snp="variant.id", p="pval" )
+manhattan(dat %>% filter(pval < max_pval), chr="chr", bp="pos", snp="variant.id", p="pval" )
 dev.off()
 cat("####manhattan-plot for MAF ends\n\n")
 
