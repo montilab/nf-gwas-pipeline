@@ -414,7 +414,7 @@ Optional arguments:
 --gds_input                Logical       If true, ignore vcf input, start with GDS files and skip qc_miss, qc_mono, vcf_to_gds steps
 --gds_list                 String        Path to the two-column mapping gds file: id , file_path 
 --outdir                   String        Path to the master folder to store all results
---covars                   String        Name of the covariates to include in analysis model separated by comma (e.g. "age,sex,educ")
+--covars                   String        Name of the covariates to include in analysis model separated by comma (e.g. "age,sex,educ", "NULL" if none covariates)
 --qc                       Logical       If true, run qc_miss(filter genotypes called below max_missing) and qc_mono (drop monomorphic SNPs)
 --max_missing              Numeric       Threshold for qc_miss (filter genotypes called below this value)
 --pca_grm                  Logical       If true, run PCAiR (generate PCA in Related individuals) and PCRelate (generate genomic relationship matrix)
