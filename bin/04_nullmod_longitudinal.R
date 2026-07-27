@@ -42,7 +42,7 @@ if(model=="logistic"){
 }
 
 fix.eff=paste(phenotypes,"~ 1")
-if(!is.null(covariates)){
+if(covariates!="NULL"){
 	for(covi in covariates)
 		fix.eff=paste(fix.eff,"+",covi)
 }
