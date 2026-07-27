@@ -40,10 +40,18 @@ if(model=="logistic"){
 
 cat("\n####fitNullModel starts\n")
 seqSetFilter(seqData, sample.id = colnames(grm))
-nullmod <- fitNullModel(seqData, outcome=phenotypes, 
-                        covars=covariates,
-                        cov.mat=grm,
-                        family=model.switch, verbose=T)
+if(covariates=="NULL"){
+  nullmod <- fitNullModel(seqData, outcome=phenotypes, 
+                          covars=NULL,
+                          cov.mat=grm,
+                          family=model.switch, verbose=T)
+}else{
+  nullmod <- fitNullModel(seqData, outcome=phenotypes, 
+                          covars=covariates,
+                          cov.mat=grm,
+                          family=model.switch, verbose=T)
+}
+
 cat("####fitNullModel ends\n\n")
 
 saveRDS(nullmod,"nullmod.rds")
