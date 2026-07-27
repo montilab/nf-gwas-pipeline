@@ -55,18 +55,31 @@ if(model=="logistic"){
 
 if(grm=="null"){
 	cat("\n####fitNullModel starts\n")
-	nullmod <- fitNullModel(seqData, outcome=phenotypes, 
-    	                    covars=covariates,
-            	            family=model.switch, verbose=T)
+  if(covariates=="NULL"){
+    nullmod <- fitNullModel(seqData, outcome=phenotypes, 
+                            covars=NULL,
+                            family=model.switch, verbose=T)
+  }else{
+    nullmod <- fitNullModel(seqData, outcome=phenotypes, 
+                            covars=covariates,
+                            family=model.switch, verbose=T)
+  }
 	cat("####fitNullModel ends\n\n")
 }else{
 	grm <- readRDS(grm)
 	seqSetFilter(seqData, sample.id = colnames(grm))
 	cat("\n####fitNullModel with grm starts\n")
-	nullmod <- fitNullModel(seqData, outcome=phenotypes, 
-    	                    covars=covariates,
-        	                cov.mat=grm,
-            	            family=model.switch, verbose=T)
+	if(covariates=="NULL"){
+	  nullmod <- fitNullModel(seqData, outcome=phenotypes, 
+	                          covars=NULL,
+	                          cov.mat=grm,
+	                          family=model.switch, verbose=T)
+	}else{
+	  nullmod <- fitNullModel(seqData, outcome=phenotypes, 
+	                          covars=covariates,
+	                          cov.mat=grm,
+	                          family=model.switch, verbose=T)
+	}
 	cat("####fitNullModel with grm ends\n\n")
 }
 
