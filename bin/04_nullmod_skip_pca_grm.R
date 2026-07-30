@@ -55,7 +55,7 @@ if(model=="logistic"){
 
 if(grm=="null"){
 	cat("\n####fitNullModel starts\n")
-  if(covariates=="NULL"){
+  if(covariates[1]=="NULL"){
     nullmod <- fitNullModel(seqData, outcome=phenotypes, 
                             covars=NULL,
                             family=model.switch, verbose=T)
@@ -69,7 +69,7 @@ if(grm=="null"){
 	grm <- readRDS(grm)
 	seqSetFilter(seqData, sample.id = colnames(grm))
 	cat("\n####fitNullModel with grm starts\n")
-	if(covariates=="NULL"){
+	if(covariates[1]=="NULL"){
 	  nullmod <- fitNullModel(seqData, outcome=phenotypes, 
 	                          covars=NULL,
 	                          cov.mat=grm,
