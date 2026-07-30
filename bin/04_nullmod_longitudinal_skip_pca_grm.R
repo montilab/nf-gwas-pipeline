@@ -70,7 +70,7 @@ if(model=="logistic"){
 }
 
 fix.eff=paste(phenotypes,"~ 1")
-if(covariates!="NULL"){
+if(covariates[1]!="NULL"){
 	for(covi in covariates)
 		fix.eff=paste(fix.eff,"+",covi)
 }
@@ -143,7 +143,7 @@ if(model=="logistic"){
 }
 
 fix.eff=paste(phenotypes,"~ 1")
-if(!is.null(covariates)){
+if(covariates[1]!="NULL"){
 	for(covi in covariates)
 		fix.eff=paste(fix.eff,"+",covi)
 }
